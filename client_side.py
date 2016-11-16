@@ -3,7 +3,6 @@ from socket import AF_INET, SOCK_STREAM, socket
 import threading
 from server_side import Server
 
-1
 
 
 class Client(threading.Thread):
@@ -48,24 +47,41 @@ if __name__ == '__main__':
     # No binding needed for client, OS will bind the socket automatically
     # when connect is issued
 
-    server_address = ('127.0.0.1',7777)
+    server_address = ('',50000)
 
     # Connecting ...
     try:
         s.connect(server_address)
+        decision = ''
+        filename = ''
+        password = ''
 
         print 'Socket connected to %s:%d' % s.getpeername()
         print 'Local end-point is  bound to %s:%d' % s.getsockname()
-
-
-        file_name = raw_input('Please, enter a name of the file to upload:')
-        f = open(file_name,'rb')
-        l = f.read(1024)
-        while (l):
-            s.send(l)
-            print('Sent ', repr(l))
+        decision=raw_input('Waiting for decision...')
+        s.send(decision)
+        if decision == '1':
+            filename=raw_input('Enter file name: ')
+            password=raw_input('Set password: ')
+            s.send(filename)
+            s.send(password)
+            f = open(filename, 'rb')
             l = f.read(1024)
-        print 'Done sending'
+            while (l):
+                s.send(l)
+                print('Sent ', repr(l))
+                l = f.read(1024)
+            print 'Done sending'
+        elif decision == '2':
+            print '2'
+        elif decision=='3':
+            print '3'
+        else:
+            print 'Wrong input'
+
+
+        #file_name = raw_input('Please, enter a name of the file to upload:')
+
 
     except SocketError:
         print " Communication ERROR "
