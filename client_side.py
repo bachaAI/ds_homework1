@@ -62,7 +62,7 @@ if __name__ == '__main__':
         s.send(decision)
         if decision == '1':
             filename=raw_input('Please, enter a name of the file to upload: ')
-            password=raw_input('Set password: ')
+            password=raw_input('Set a password for a file:')
             s.send(filename)
             s.send(password)
             f = open(filename, 'rb')
