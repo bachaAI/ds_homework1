@@ -1,7 +1,6 @@
 class File:
-
     def __init__(self):
-        self.rows = [""]
+        self.rows = []
 
     def __init__(self, string_list):
         self.rows = []
@@ -14,7 +13,7 @@ class File:
         else:
             self.rows[i] = self.rows[i][:j] + char + self.rows[i][j:]
             tail = self.rows[i][100]
-            for k in range(i+1,len(self.rows)):
+            for k in range(i + 1, len(self.rows)):
                 self.rows[k] = tail + self.rows[k]
                 if len(self.rows[k]) == 101:
                     tail = self.rows[k][100]
@@ -24,8 +23,24 @@ class File:
                 else:
                     break
 
+    # name in format "name.txt"
+    def upload_to_txt(self, name):
+        if name.split(".")[-1] != "txt":
+            name += ".txt"
 
+        txt_file = open(name, "w")
+        for i in self.rows:
+            txt_file.write(i + '\n')
+        txt_file.close()
+        print "File was uploaded to " + name
 
+    # name in format "name.txt"
+    def download_from_txt(self, name):
+        if name.split(".")[-1] != "txt":
+            name += ".txt"
+        with open(name) as f:
+            for line in f:
+                self.rows.append(line[:-1])
 
 if __name__ == "__main__":
     s1 = "a" * 100
@@ -36,8 +51,6 @@ if __name__ == "__main__":
     l.append(s2)
     l.append(s3)
     f = File(l)
-    f.insert(0,12,"b")
+    f.insert(0, 12, "b")
     for elem in f.rows:
         print elem
-
-

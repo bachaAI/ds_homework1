@@ -40,7 +40,6 @@ def exit_command():
     if tkMessageBox.askokcancel("Quit", "Do you really want to quit?"):
         root.destroy()
 
-
 def about_command():
     label = tkMessageBox.showinfo("About", "Just Another TextPad \n Copyright \n No rights left to reserve")
 
