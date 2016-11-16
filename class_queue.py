@@ -1,4 +1,5 @@
 from collections import deque
+#temporary class of queue
 class Queue:
     def __init__(self):
         self.q=deque([])
@@ -16,3 +17,4 @@ class Queue:
 #print queue.q
 #print queue.take()
 #print queue.q
+

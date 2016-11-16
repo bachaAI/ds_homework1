@@ -6,8 +6,6 @@ import select
 import sys
 #import threading
 
-
-
 class Server:
     def __init__(self):
         self.host = ''       # ip server's address
@@ -16,12 +14,12 @@ class Server:
         self.size = 1024     # max message size
         self.server = None
         self.threads = []
-
     def open_socket(self):
         try:
             self.server = socket(AF_INET, SOCK_STREAM)
             self.server.bind((self.host, self.port))
             self.server.listen(self.backlog)
+
         except SocketErrors, (value, message):
             if self.server:
                 self.server.close()
@@ -55,6 +53,7 @@ class Server:
                     self.server.close()
 
     def cliet_service(self, ):
+        return 0
 
 
     def file_syncronization(self):
