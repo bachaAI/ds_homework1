@@ -2,7 +2,7 @@ from socket import AF_INET, SOCK_STREAM, socket
 import threading
 from server_side import Server
 
-
+1
 
 
 class Client(threading.Thread):
