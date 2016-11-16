@@ -4,7 +4,10 @@ from client_side import Text
 from os import getpid
 import select
 import sys
-#import threading
+
+from threading import Thread
+import threading
+import string
 
 
 
@@ -20,60 +23,70 @@ class Server:
     def edit_function(self,text):
         txt = Text()
 
+    def run_server_run(self):
+        while True:
+            client_socket, client_addr = self.server.accept()
+            client_socket.send('Please enter 1 if you want to Upload New File.\n'
+                               'Please enter 2 if you want to Create New File.\n'
+                               'Please enter 3 if you want to Download Existed File.\n')
+            decision = ''
+            filename = ''
+            password = ''
+            client_socket.recv(decision)
+            if decision == '1':
+                client_socket.recv(filename)
+                client_socket.recv(password)
+                with open(str(filename), 'wb') as f:
+                    print 'file %s opened' % str(filename)
+                    while True:
+                        data = client_socket.recv(1024)
+                        if not data:
+                            break
+                        print('receiving data...')
+                        print('data:', (data))
+                        # write data to a file
+                        f.write(data)
+                text = open(filename, 'rb')
+                self.edit_function(text)
+
+
+
+            elif decision == '2':
+                client_socket.recv(filename)
+                client_socket.recv(password)
+                text = open(filename, 'rb')
+                if password == password_file:
+                    self.edit_function(text)
+
+
+            elif decision == '3':
+                client_socket.recv(filename)
+                client_socket.recv(password)
+                text = open(filename, 'rb')
+                if password == password_file:
+                    l = text.read(1024)
+                    while (l):
+                        client_socket.send(l)
+                        print('Sent ', repr(l))
+                        l = f.read(1024)
+                    self.edit_function(text)
+
+            else:
+                client_socket.send('You have made wrong decision. Good luck!\n')
+
 
     def open_socket(self):
         try:
             self.server = socket(AF_INET, SOCK_STREAM)
             self.server.bind((self.host, self.port))
-            self.server.listen(self.backlog)
             while True:
-                client_socket, client_addr = self.server.accept()
-                client_socket.send('Please enter 1 if you want to Upload New File.\n'
-                                   'Please enter 2 if you want to Create New File.\n'
-                                   'Please enter 3 if you want to Download Existed File.\n')
-                decision = ''
-                filename = ''
-                password = ''
-                client_socket.recv(decision)
-                if decision == '1':
-                    client_socket.recv(filename)
-                    client_socket.recv(password)
-                    with open(str(filename), 'wb') as f:
-                        print 'file %s opened' % str(filename)
-                        while True:
-                            data = client_socket.recv(1024)
-                            if not data:
-                                break
-                            print('receiving data...')
-                            print('data:', (data))
-                            # write data to a file
-                            f.write(data)
-                    text = open(filename, 'rb')
-                    self.edit_function(text)
+               self.server.listen(self.backlog)
+               thread = Thread(target=self.run_server_run(), args=)
+               thread.start()
+               self.threads.append(thread)
+            for t in self.threads:
+                t.join()
 
-
-
-                elif decision == '2':
-                    client_socket.recv(filename)
-                    client_socket.recv(password)
-                    text = open(filename, 'rb')
-                    self.edit_function(text)
-
-
-                elif decision == '3':
-                    client_socket.recv(filename)
-                    client_socket.recv(password)
-                    text = open(filename, 'rb')
-                    if password == password_file:
-                       l = text.read(1024)
-                       while (l):
-                           client_socket.send(l)
-                           print('Sent ', repr(l))
-                           l = f.read(1024)
-                        self.edit_function(text)
-
-                else:
-                    client_socket.send('You have made wrong decision. Good luck!\n')
 
 
 
