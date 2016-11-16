@@ -44,12 +44,31 @@ class Server:
                             print('data:', (data))
                             # write data to a file
                             f.write(data)
+                    text = open(filename, 'rb')
+                    edit_function(text)
 
 
 
                 elif decision == '2':
+                    client_socket.recv(filename)
+                    client_socket.recv(password)
+                    text = open(filename, 'rb')
+                    edit_function(text)
+
 
                 elif decision == '3':
+                    client_socket.recv(filename)
+                    client_socket.recv(password)
+                    text = open(filename, 'rb')
+                    if password == password_file:
+                       l = text.read(1024)
+                       while (l):
+                           client_socket.send(l)
+                           print('Sent ', repr(l))
+                           l = f.read(1024)
+                        edit_function(text)
+
+
 
                 else:
                     client_socket.send('You have made wrong decision. Good luck!\n')
