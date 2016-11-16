@@ -55,7 +55,7 @@ class Server:
                     self.server.close()
 
     def cliet_service(self, ):
-
+1
 
 
     def file_syncronization(self):
