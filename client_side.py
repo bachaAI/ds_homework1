@@ -79,8 +79,6 @@ if __name__ == '__main__':
                         break
                     print('reciving data...')
                     f.write(data)
-        else:
-            print 'Wrong input'
 
     except SocketError:
         print " Communication ERROR "
