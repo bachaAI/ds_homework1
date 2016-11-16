@@ -77,7 +77,7 @@ if __name__ == '__main__':
         elif decision=='3':
             print '3'
         else:
-            print 'Wrong input.'
+            print 'Wrong input'
 
     except SocketError:
         print " Communication ERROR "
