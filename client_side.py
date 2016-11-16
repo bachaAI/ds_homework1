@@ -40,22 +40,14 @@ from socket import error as SocketError
 
 if __name__ == '__main__':
     print 'Application started'
-
     s = socket(AF_INET, SOCK_STREAM)
     print 'TCP Socket created'
-
-    # No binding needed for client, OS will bind the socket automatically
-    # when connect is issued
-
     server_address = ('',50000)
-
-    # Connecting ...
     try:
         s.connect(server_address)
         decision = ''
         filename = ''
         password = ''
-
         print 'Socket connected to %s:%d' % s.getpeername()
         print 'Local end-point is  bound to %s:%d' % s.getsockname()
         decision=raw_input('Waiting for decision...')
@@ -73,7 +65,10 @@ if __name__ == '__main__':
                 l = f.read(1024)
             print 'Done sending'
         elif decision == '2':
-            print '2'
+            filename = raw_input('Please, enter a name of the file to create: ')
+            password = raw_input('Set a password for a file:')
+            s.send(filename)
+            s.send(password)
         elif decision=='3':
             print '3'
         else:
