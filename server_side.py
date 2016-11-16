@@ -22,6 +22,40 @@ class Server:
             self.server = socket(AF_INET, SOCK_STREAM)
             self.server.bind((self.host, self.port))
             self.server.listen(self.backlog)
+            while True:
+                client_socket, client_addr = self.server.accept()
+                client_socket.send('Please enter 1 if you want to Upload New File.\n'
+                                   'Please enter 2 if you want to Create New File.\n'
+                                   'Please enter 3 if you want to Download Existed File.\n')
+                decision = ''
+                filename = ''
+                password = ''
+                client_socket.recv(decision)
+                if decision == '1':
+                    client_socket.recv(filename)
+                    client_socket.recv(password)
+                    with open(str(filename), 'wb') as f:
+                        print 'file %s opened' % str(filename)
+                        while True:
+                            data = client_socket.recv(1024)
+                            if not data:
+                                break
+                            print('receiving data...')
+                            print('data:', (data))
+                            # write data to a file
+                            f.write(data)
+
+
+
+                elif decision == '2':
+
+                elif decision == '3':
+
+                else:
+                    client_socket.send('You have made wrong decision. Good luck!\n')
+
+
+
         except SocketErrors, (value, message):
             if self.server:
                 self.server.close()
