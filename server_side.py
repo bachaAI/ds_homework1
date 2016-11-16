@@ -68,8 +68,6 @@ class Server:
                            l = f.read(1024)
                         edit_function(text)
 
-
-
                 else:
                     client_socket.send('You have made wrong decision. Good luck!\n')
 
