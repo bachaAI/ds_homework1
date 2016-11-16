@@ -70,7 +70,15 @@ if __name__ == '__main__':
             s.send(filename)
             s.send(password)
         elif decision=='3':
-            print '3'
+            filename = raw_input('Please, enter a file name: ')
+            password = raw_input('Please enter password of a file:')
+            with open(str(filename),'wb') as f:
+                while True:
+                    data = s.recv(1024)
+                    if not data:
+                        break
+                    print('reciving data...')
+                    f.write(data)
         else:
             print 'Wrong input'
 
