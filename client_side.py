@@ -61,7 +61,7 @@ if __name__ == '__main__':
         decision=raw_input('Waiting for decision...')
         s.send(decision)
         if decision == '1':
-            filename=raw_input('Enter file name: ')
+            filename=raw_input('Please, enter a name of the file to upload: ')
             password=raw_input('Set password: ')
             s.send(filename)
             s.send(password)
@@ -78,10 +78,6 @@ if __name__ == '__main__':
             print '3'
         else:
             print 'Wrong input.'
-
-
-        #file_name = raw_input('Please, enter a name of the file to upload:')
-
 
     except SocketError:
         print " Communication ERROR "
