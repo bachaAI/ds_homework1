@@ -4,7 +4,7 @@ from client_side import Client
 from os import getpid
 import select
 import sys
-import threading
+#import threading
 
 
 
@@ -32,7 +32,7 @@ class Server:
 
     def run(self):
         self.open_socket()
-        input = [self.server, sys.stdin]
+        input = [self.server]
         running = 1
         while running:
             in_ready, out_ready, except_ready = select.select(input, [], [])
@@ -48,20 +48,20 @@ class Server:
                     c = Client(self.server.accept())
                     c.start()
                     self.threads.append(c)
-
-                elif s == sys.stdin:
-                    # handle standard input
-                    junk = sys.stdin.readline()
+                    for c in self.threads:
+                        c.join()
+                elif SocketErrors:
                     running = 0
+                    self.server.close()
 
-                    # close all threads
-
-        self.server.close()
-        for c in self.threads:
-            c.join()
+    def cliet_service(self, ):
 
 
-     def file_syncronization(self):
+
+    def file_syncronization(self):
+        return 0
+
+
 
 
 
