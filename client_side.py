@@ -77,7 +77,7 @@ if __name__ == '__main__':
         elif decision=='3':
             print '3'
         else:
-            print 'Wrong input'
+            print 'Wrong input.'
 
 
         #file_name = raw_input('Please, enter a name of the file to upload:')
