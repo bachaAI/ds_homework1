@@ -7,20 +7,21 @@ class File:
         for elem in string_list:
             self.rows.append(elem)
 
-    def change(self, i, j, char):
-        last_column = len(self.rows) - 1
-        if char == "bs":
-            if len(self.rows[i]):
-                self.rows[i] = self.rows[i][:j-1] + self.rows[i][j:]
-            else:
-                self.rows.pop(i)
-        elif char == "ent":
-            self.rows.insert(i+1,"")
-            if self.rows[i][:j]:
-                self.rows[i+1] = self.rows[i][j:]
-                self.rows[i] = self.rows[i][:j]
+    def insert(self, i, j, char):
+        if len(self.rows[i]) < 100:
+            self.rows[i] = self.rows[i][:j] + char + self.rows[i][j:]
         else:
             self.rows[i] = self.rows[i][:j] + char + self.rows[i][j:]
+            tail = self.rows[i][100]
+            for k in range(i + 1, len(self.rows)):
+                self.rows[k] = tail + self.rows[k]
+                if len(self.rows[k]) == 101:
+                    tail = self.rows[k][100]
+                    if k == len(self.rows) - 1:
+                        self.rows.append("")
+                        self.rows[-1] = tail + self.rows[-1]
+                else:
+                    break
 
     # name in format "name.txt"
     def upload_to_txt(self, name):
