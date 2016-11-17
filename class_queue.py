@@ -2,12 +2,30 @@ from collections import deque
 #temporary class of queue
 class Queue:
     def __init__(self):
-        self.q=deque([])
-    def add(self, input):
-        self.q.append(input)
-        return self.q
-    def take(self):
-        return self.q.popleft()
+        self.q_user1 = deque([])
+        self.q_user2 = deque([])
+        self.q_user3 = deque([])
+
+    def add_user1(self, input):
+        self.q_user1.append(input)
+        return self.q_user1
+
+    def add_user2(self, input):
+        self.q_user2.append(input)
+        return self.q_user2
+
+    def add_user3(self, input):
+        self.q_user3.append(input)
+        return self.q_user3
+
+    def take1(self):
+        return self.q_user1.popleft()
+
+    def take2(self):
+        return self.q_user2.popleft()
+
+    def take3(self):
+        return self.q_user3.popleft()
 
 #queue=Queue()
 #queue.add('3,6,c')
