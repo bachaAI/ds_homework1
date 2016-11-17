@@ -5,6 +5,8 @@ import tkFileDialog
 import tkMessageBox
 import time
 
+keybord_string = "qwertyuiopasdfghjklzxcvbnm"
+#[]{};:''|<>,./?1234567890-=!@#$%^&*()_+\\`~
 root = Tkinter.Tk(className=" Collaborative Text Editor")
 textPad = ScrolledText(root, width=100, height=80)
 
@@ -40,6 +42,7 @@ def exit_command():
     if tkMessageBox.askokcancel("Quit", "Do you really want to quit?"):
         root.destroy()
 
+
 def about_command():
     label = tkMessageBox.showinfo("About", "Just Another TextPad \n Copyright \n No rights left to reserve")
 
@@ -47,11 +50,40 @@ def about_command():
 def dummy():
     print "I am a Dummy Command, I will be removed in the next step"
 
-def show():
-    print textPad.get(1.0, END)
+def getText():
+     return textPad.get(1.0, END)
+
+
+def get_info():
+    print textPad.index(INSERT)
+    textPad.insert(INSERT, "Some text")
+    print textPad.index(INSERT)
+
+def key_enter(event):
+    s = textPad.index(INSERT)
+    print s
+
+
+
+def key_backspace(event):
+    pass
+
+def key_disable(event):
+    textPad.config(state=DISABLED)
 
 def key(event):
-    print "pressed", repr(event.char)
+    s = textPad.index(INSERT)
+    point_index = s.index(".")
+    index1 = int(s[:point_index])
+    index2 = int(s[point_index+1:])
+    out = textPad.get("%d.%d" % (index1, index2 - 1), "%d.%d" % (index1, index2))
+    if out:
+        print s,out
+
+def key_press(event):
+    textPad.config(state=DISABLED)
+    time.sleep(0.3)
+    textPad.config(state=NORMAL)
 
 
 menu = Menu(root)
@@ -63,15 +95,16 @@ filemenu.add_command(label="Open...", command=open_command)
 filemenu.add_command(label="Save", command=save_command)
 filemenu.add_separator()
 filemenu.add_command(label="Exit", command=exit_command)
-filemenu.add_command(label="Show", command=show)
 helpmenu = Menu(menu)
 menu.add_cascade(label="Help", menu=helpmenu)
 helpmenu.add_command(label="About...", command=about_command)
 
-textPad.bind("f", key)
+textPad.bind("<Control-v>", key_disable)
+textPad.bind("<Return>", key_enter)
+textPad.bind("<BackSpace>", key_backspace)
+textPad.bind("<Key>", key_press)
+textPad.bind("<KeyRelease>", key)
 
-#
+
 textPad.pack()
 root.mainloop()
-
-
