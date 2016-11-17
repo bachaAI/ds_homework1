@@ -36,11 +36,60 @@ if __name__ == "__main__":
 from socket import AF_INET, SOCK_STREAM, socket
 from socket import error as SocketError
 
+import Tkinter
+from Tkinter import *
+from ScrolledText import *
+import tkFileDialog
+import tkMessageBox
+
+
 
 
 if __name__ == '__main__':
     print 'Application started'
-
+    # ---------- Starting User dialog ----------
+    exit0 = 0
+    while exit0 == 0:
+        print 'Press n to create new file or d to download existing'
+        ans = raw_input()
+        if ans == 'n':
+            exit1 = 0
+            while exit1 == 0:
+                f_name = raw_input('Enter file name: ')
+                #request to the server for creating new file if curent name is free
+                #server ansver
+                s_ans = 'ok'
+                if s_ans =='ok':
+                    #start gui
+                    root = Tkinter.Tk(className=" Collaborative Text Editor")
+                    textPad = ScrolledText(root, width=100, height=80)
+                    textPad.pack()
+                    root.mainloop()
+                    exit1 = 1
+                    print 'ok'
+                elif s_ans == 'no':
+                    print 'Choose another name'
+                else:
+                    print 'Something wrong, try again!'
+            exit0 = 1
+        elif ans == 'd':
+            exit2 = 0
+            while exit2 == 0:
+                print 'Enter file name:'
+                f_name = raw_input()
+                #request to the server if current file exist
+                s_ans = ''
+                if s_ans == 'ok':
+                    #response with file
+                    #gui.set(resp_file)
+                    print 'file is ok'
+                    exit2 = 1
+                elif s_ans == 'no':
+                    print 'There is no file with this name on server, try again!'
+            exit0 = 1
+        else:
+            print 'Wront choice, try again!'
+    #--------------------------------------
     s = socket(AF_INET, SOCK_STREAM)
     print 'TCP Socket created'
 
@@ -87,7 +136,7 @@ if __name__ == '__main__':
         print " Communication ERROR "
 
     finally:
-        f.close()
+        #f.close()
         # Wait for user input before terminating application
         raw_input('Press Enter to terminate ...')
         s.close()

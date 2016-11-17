@@ -1,6 +1,6 @@
 from socket import AF_INET, SOCK_STREAM, socket
 from socket import error as SocketErrors
-from client_side import Client
+from text_file import File
 from os import getpid
 import select
 import sys
@@ -16,6 +16,10 @@ class Server:
         self.size = 1024     # max message size
         self.server = None
         self.threads = []
+
+    def edit_function(self,text):
+        txt = File()
+
 
     def open_socket(self):
         try:
@@ -44,12 +48,30 @@ class Server:
                             print('data:', (data))
                             # write data to a file
                             f.write(data)
+                    text = open(filename, 'rb')
+                    self.edit_function(text)
 
 
 
                 elif decision == '2':
+                    client_socket.recv(filename)
+                    client_socket.recv(password)
+                    text = open(filename, 'rb')
+                    if password == password_file:
+                       self.edit_function(text)
+
 
                 elif decision == '3':
+                    client_socket.recv(filename)
+                    client_socket.recv(password)
+                    text = open(filename, 'rb')
+                    if password == password_file:
+                       l = text.read(1024)
+                       while (l):
+                           client_socket.send(l)
+                           print('Sent ', repr(l))
+                           l = f.read(1024)
+                        self.edit_function(text)
 
                 else:
                     client_socket.send('You have made wrong decision. Good luck!\n')
@@ -89,7 +111,7 @@ class Server:
                     self.server.close()
 
     def cliet_service(self, ):
-1
+
 
 
     def file_syncronization(self):
