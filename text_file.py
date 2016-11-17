@@ -53,3 +53,5 @@ if __name__ == "__main__":
     f.insert(0, 12, "b")
     for elem in f.rows:
         print elem
+
+pass
