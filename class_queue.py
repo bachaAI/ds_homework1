@@ -1,7 +1,7 @@
 from collections import deque
 from threading import Thread
 import threading
-#temporary class of queue
+#temporary class of queue b
 class Queue:
     def __init__(self):
         self.lock = threading.Lock()
