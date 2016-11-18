@@ -71,14 +71,17 @@ def key_disable(event):
     global disableFlag
     disableFlag = True
 
-def key_release(event):
-    global disableFlag
+
+def mouse_button(event):
+    textPad.config(state=NORMAL)
 
 
 def key(event):
+    print event.keycode
     global disableFlag
     if disableFlag == True:
         print "disabled"
+    elif disableFlag == True and event.keycode != 37:
         disableFlag = False
     else:
         #Block output for Arrows keys
@@ -96,11 +99,11 @@ def key(event):
         index2 = int(s[point_index+1:])
         out = textPad.get("%d.%d" % (index1, index2 - 1), "%d.%d" % (index1, index2))
         if out:
-            print "%d.%d" % (index1, index2 - 1),out
+            print "%d.%d" % (index1, index2 - 1), out
 
 def key_press(event):
     textPad.config(state=DISABLED)
-    time.sleep(0.3)
+    time.sleep(0.2)
     textPad.config(state=NORMAL)
 
 
@@ -117,7 +120,9 @@ menu.add_cascade(label="Help", menu=helpmenu)
 helpmenu.add_command(label="About...", command=about_command)
 
 #Keybord bindings to virtual events
+textPad.bind("<Button-1>",mouse_button)
 textPad.bind("<Control-v>", key_disable)
+textPad.bind("<Control-c>", key_disable)
 textPad.bind("<Delete>", key_disable)
 textPad.bind("<Insert>", key_disable)
 textPad.bind("<Return>", key_enter)
