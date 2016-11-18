@@ -4,7 +4,7 @@ from text_file import File
 from os import getpid
 import select
 import sys
-import threading
+from threading import Thread
 
 
 
