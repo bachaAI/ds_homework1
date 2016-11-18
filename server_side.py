@@ -73,7 +73,7 @@ class Server:
                            client_socket.send(l)
                            print('Sent ', repr(l))
                            l = f.read(1024)
-                        self.edit_function(text)
+                       self.edit_function(text)
 
                 else:
                     client_socket.send('You have made wrong decision. Good luck!\n')
