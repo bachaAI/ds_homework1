@@ -4,7 +4,7 @@ from text_file import File
 from os import getpid
 import select
 import sys
-#import threading
+from threading import Thread
 
 
 
@@ -16,10 +16,13 @@ class Server:
         self.size = 1024     # max message size
         self.server = None
         self.threads = []
+        text = File()
+
+    def file_syncronization(self):
+        return 0
 
     def edit_function(self,text):
-        txt = File()
-
+        return 0
 
     def open_socket(self):
         try:
@@ -57,8 +60,7 @@ class Server:
                     client_socket.recv(filename)
                     client_socket.recv(password)
                     text = open(filename, 'rb')
-                    if password == password_file:
-                       self.edit_function(text)
+                    self.edit_function(text)
 
 
                 elif decision == '3':
@@ -71,7 +73,7 @@ class Server:
                            client_socket.send(l)
                            print('Sent ', repr(l))
                            l = f.read(1024)
-                        self.edit_function(text)
+                       self.edit_function(text)
 
                 else:
                     client_socket.send('You have made wrong decision. Good luck!\n')
@@ -110,15 +112,24 @@ class Server:
                     running = 0
                     self.server.close()
 
-    def cliet_service(self, ):
 
 
+    def open_socket_edition(self):
+        try:
+            self.server = socket(AF_INET, SOCK_STREAM)
+            self.server.bind((self.host, self.port))
+            while True:
+               self.server.listen(self.backlog)
+               thread = Thread(target=self.run_server_run(), args=)
+               thread.start()
+               self.threads.append(thread)
+            for t in self.threads:
+                t.join()
 
-    def file_syncronization(self):
-        return 0
-
-
-
+if __name__ == '__main__':
+    s = Server()
+    s.run()
+    print 'Server started!'
 
 
     #############################################
