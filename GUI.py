@@ -5,7 +5,9 @@ import tkFileDialog
 import tkMessageBox
 import time
 
-keybord_string = "qwertyuiopasdfghjklzxcvbnm"
+disableFlag = False
+
+#keybord_string = "qwertyuiopasdfghjklzxcvbnm"
 #[]{};:''|<>,./?1234567890-=!@#$%^&*()_+\\`~
 root = Tkinter.Tk(className=" Collaborative Text Editor")
 textPad = ScrolledText(root, width=100, height=80)
@@ -44,41 +46,57 @@ def exit_command():
 
 
 def about_command():
-    label = tkMessageBox.showinfo("About", "Just Another TextPad \n Copyright \n No rights left to reserve")
+    label = tkMessageBox.showinfo("About", "Collaborative text editor \n Developed by Bachinskiy A., Shapaval R., \
+                                    Shuchorukov M., Tkachuk D. using Tk.tkinter.\n No rights left to reserve :)")
 
 
-def dummy():
-    print "I am a Dummy Command, I will be removed in the next step"
 
 def getText():
      return textPad.get(1.0, END)
-
-
-def get_info():
-    print textPad.index(INSERT)
-    textPad.insert(INSERT, "Some text")
-    print textPad.index(INSERT)
 
 def key_enter(event):
     s = textPad.index(INSERT)
     print s
 
-
-
 def key_backspace(event):
-    pass
-
-def key_disable(event):
-    textPad.config(state=DISABLED)
-
-def key(event):
     s = textPad.index(INSERT)
     point_index = s.index(".")
     index1 = int(s[:point_index])
-    index2 = int(s[point_index+1:])
-    out = textPad.get("%d.%d" % (index1, index2 - 1), "%d.%d" % (index1, index2))
-    if out:
-        print s,out
+    index2 = int(s[point_index + 1:])
+    #out = textPad.get("%d.%d" % (index1, index2 - 1), "%d.%d" % (index1, index2))
+    print "%d.%d" % (index1, index2 - 1)
+
+def key_disable(event):
+    textPad.config(state=DISABLED)
+    global disableFlag
+    disableFlag = True
+
+def key_release(event):
+    global disableFlag
+
+
+def key(event):
+    global disableFlag
+    if disableFlag == True:
+        print "disabled"
+        disableFlag = False
+    else:
+        #Block output for Arrows keys
+        if event.keycode == 113 or event.keycode == 114 or \
+                event.keycode == 112 or event.keycode == 116:
+            return
+        #Block output for Ctrl
+        if event.keycode == 37:
+            return
+        #Block output for v if Ctrl pressed
+        textPad.config(state=NORMAL)
+        s = textPad.index(INSERT)
+        point_index = s.index(".")
+        index1 = int(s[:point_index])
+        index2 = int(s[point_index+1:])
+        out = textPad.get("%d.%d" % (index1, index2 - 1), "%d.%d" % (index1, index2))
+        if out:
+            print "%d.%d" % (index1, index2 - 1),out
 
 def key_press(event):
     textPad.config(state=DISABLED)
@@ -90,7 +108,6 @@ menu = Menu(root)
 root.config(menu=menu)
 filemenu = Menu(menu)
 menu.add_cascade(label="File", menu=filemenu)
-filemenu.add_command(label="New", command=dummy)
 filemenu.add_command(label="Open...", command=open_command)
 filemenu.add_command(label="Save", command=save_command)
 filemenu.add_separator()
@@ -99,7 +116,10 @@ helpmenu = Menu(menu)
 menu.add_cascade(label="Help", menu=helpmenu)
 helpmenu.add_command(label="About...", command=about_command)
 
+#Keybord bindings to virtual events
 textPad.bind("<Control-v>", key_disable)
+textPad.bind("<Delete>", key_disable)
+textPad.bind("<Insert>", key_disable)
 textPad.bind("<Return>", key_enter)
 textPad.bind("<BackSpace>", key_backspace)
 textPad.bind("<Key>", key_press)
