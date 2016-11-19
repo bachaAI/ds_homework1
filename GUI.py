@@ -6,6 +6,7 @@ import tkMessageBox
 import time
 
 disableFlag = False
+shiftFlag = False
 
 #keybord_string = "qwertyuiopasdfghjklzxcvbnm"
 #[]{};:''|<>,./?1234567890-=!@#$%^&*()_+\\`~
@@ -75,15 +76,22 @@ def key_disable(event):
 def mouse_button(event):
     textPad.config(state=NORMAL)
 
+def key_shift(event):
+    global shiftFlag
+    shiftFlag = True
 
 def key(event):
     print event.keycode
     global disableFlag
+    global shiftFlag
     if disableFlag == True:
         print "disabled"
-    elif disableFlag == True and event.keycode != 37:
-        disableFlag = False
+        if event.keycode != 37:
+            disableFlag = False
     else:
+        #Shift handling
+        if shiftFlag == True:
+            print "shift"
         #Block output for Arrows keys
         if event.keycode == 113 or event.keycode == 114 or \
                 event.keycode == 112 or event.keycode == 116:
@@ -123,6 +131,7 @@ helpmenu.add_command(label="About...", command=about_command)
 textPad.bind("<Button-1>",mouse_button)
 textPad.bind("<Control-v>", key_disable)
 textPad.bind("<Control-c>", key_disable)
+textPad.bind("<Shift_L>", key_shift)
 textPad.bind("<Delete>", key_disable)
 textPad.bind("<Insert>", key_disable)
 textPad.bind("<Return>", key_enter)
