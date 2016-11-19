@@ -96,7 +96,7 @@ def key(event):
         if event.keycode == 113 or event.keycode == 114 or \
                 event.keycode == 112 or event.keycode == 116:
             return
-        #Block output for Ctrl button
+        #Block output for Ctrl
         if event.keycode == 37:
             return
         #Block output for v if Ctrl pressed
