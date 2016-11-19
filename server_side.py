@@ -18,6 +18,7 @@ class Server:
         self.threads = []
         text = File()
 
+
     def file_syncronization(self, triple, text, client_socket, threads,queue):
         client_socket.recv(triple)
         for elem in threads:
