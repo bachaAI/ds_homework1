@@ -34,12 +34,7 @@ class Server:
                 queue.add_user3(triple)
                 text.change(triple)
 
-
-
-
-        return 0
-
-    def edit_function(self,text, client_socket):
+    def edit_function(self,text, client_socket,triple):
         if client_socket.recv(triple)
             self.file_syncronization(triple, text)
 
