@@ -18,11 +18,29 @@ class Server:
         self.threads = []
         text = File()
 
-    def file_syncronization(self):
+    def file_syncronization(self, triple, text, client_socket, threads,queue):
+        client_socket.recv(triple)
+        for elem in threads:
+            if elem.getName() == 'Thread-1':
+                queue.add_user1(triple)
+                text.change(triple)
+
+            if elem.getName() == 'Thread-2':
+                queue.add_user2(triple)
+                text.change(triple)
+
+            if elem.getName() == 'Thread-3':
+                queue.add_user3(triple)
+                text.change(triple)
+
+
+
+
         return 0
 
-    def edit_function(self,text):
-        return 0
+    def edit_function(self,text, client_socket):
+        if client_socket.recv(triple)
+            self.file_syncronization(triple, text)
 
     def open_socket(self):
         try:
@@ -120,7 +138,7 @@ class Server:
             self.server.bind((self.host, self.port))
             while True:
                self.server.listen(self.backlog)
-               thread = Thread(target=self.run_server_run(), args=)
+               thread = Thread(target=self.open_socket(), args=)
                thread.start()
                self.threads.append(thread)
             for t in self.threads:
