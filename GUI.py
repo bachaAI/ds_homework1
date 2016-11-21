@@ -96,7 +96,7 @@ def key_press(event):
     time.sleep(0.2)
     textPad.config(state=NORMAL)
 
-def run_gui():
+def run_gui(text=""):
     root = Tkinter.Tk(className=" Collaborative Text Editor")
     textPad = ScrolledText(root, width=100, height=80)
     menu = Menu(root)
@@ -110,7 +110,8 @@ def run_gui():
     helpmenu = Menu(menu)
     menu.add_cascade(label="Help", menu=helpmenu)
     helpmenu.add_command(label="About...", command=about_command)
-
+    #Insert given text
+    textPad.insert(END,text)
     #Keybord bindings to virtual events
     textPad.bind("<Button-1>",mouse_button)
     textPad.bind("<Control-v>", key_disable)
@@ -126,3 +127,5 @@ def run_gui():
 
     textPad.pack()
     root.mainloop()
+
+run_gui()
