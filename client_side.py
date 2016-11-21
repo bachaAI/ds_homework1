@@ -92,6 +92,7 @@ if __name__ == '__main__':
                     print 'There is no file with this name on server, try again!'
             exit0 = 1
         else:
+
             print 'Wront choice, try again!'
 
     #--------------------------------------
