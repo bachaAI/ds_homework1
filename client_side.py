@@ -37,10 +37,9 @@ from socket import AF_INET, SOCK_STREAM, socket
 from socket import error as SocketError
 
 import Tkinter
-from Tkinter import *
 from ScrolledText import *
-import tkFileDialog
-import tkMessageBox
+
+
 
 
 SOCKETS = [50001, 50002, 50003]
