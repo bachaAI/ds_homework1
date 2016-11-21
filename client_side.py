@@ -113,7 +113,6 @@ if __name__ == '__main__':
         #server_address = ('127.0.1.1', elem)
         if s.connect(server_address):
             break
-
         else:
             print "Server is busy"
     '''
