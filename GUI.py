@@ -30,11 +30,11 @@ def about_command():
 
 #Here come all button handlers
 
-def key_enter(event):
+def key_enter(textPad, event, socket):
     s = textPad.index(INSERT)
     print s
 
-def key_backspace(event):
+def key_backspace(textPad, event, socket):
     print "backspace"
     s = textPad.index(INSERT)
     point_index = s.index(".")
@@ -42,19 +42,19 @@ def key_backspace(event):
     index2 = int(s[point_index + 1:])
     print "%d.%d" % (index1, index2 - 1)
 
-def key_disable(event):
+def key_disable(textPad, event, socket):
     textPad.config(state=DISABLED)
     global disableFlag
     disableFlag = True
 
-def mouse_button(event):
+def mouse_button(textPad, event, socket):
     textPad.config(state=NORMAL)
 
-def key_shift(event):
+def key_shift(textPad, event, socket):
     global shiftFlag
     shiftFlag = True
 
-def key(event):
+def key(textPad, event, socket):
     global disableFlag
     global shiftFlag
     if disableFlag == True:
@@ -67,7 +67,7 @@ def key(event):
         if shiftFlag == True:
             print "shift"
             s = textPad.index(INSERT)
-            output(s)
+            output(textPad, s, socket)
             shiftFlag = False
         else:
             #Block output for Arrows keys
@@ -80,9 +80,9 @@ def key(event):
                 return
             textPad.config(state=NORMAL)
             s = textPad.index(INSERT)
-            output(s)
+            output(textPad, s, socket)
 
-def output(s):
+def output(textPad, s, socket):
     point_index = s.index(".")
     index1 = int(s[:point_index])
     index2 = int(s[point_index + 1:])
@@ -91,12 +91,12 @@ def output(s):
         print "%d.%d" % (index1, index2 - 1), out
 
 
-def key_press(event):
+def key_press(textPad, event, socket):
     textPad.config(state=DISABLED)
     time.sleep(0.2)
     textPad.config(state=NORMAL)
 
-def run_gui(text=""):
+def run_gui(socket, file=""):
     root = Tkinter.Tk(className=" Collaborative Text Editor")
     textPad = ScrolledText(root, width=100, height=80)
     menu = Menu(root)
@@ -111,20 +111,24 @@ def run_gui(text=""):
     menu.add_cascade(label="Help", menu=helpmenu)
     helpmenu.add_command(label="About...", command=about_command)
     #Insert given text
-    textPad.insert(END,text)
+    if file:
+        f = open(file, 'r')
+        textPad.insert(END,f.read())
     #Keybord bindings to virtual events
-    textPad.bind("<Button-1>",mouse_button)
-    textPad.bind("<Control-v>", key_disable)
-    textPad.bind("<Control-c>", key_disable)
-    textPad.bind("<Shift_L>", key_shift)
-    textPad.bind("<Delete>", key_disable)
-    textPad.bind("<Insert>", key_disable)
-    textPad.bind("<Return>", key_enter)
-    textPad.bind("<BackSpace>", key_backspace)
-    textPad.bind("<Key>", key_press)
-    textPad.bind("<KeyRelease>", key)
+    textPad.bind("<Button-1>",lambda event: mouse_button(textPad, event,"Hello"))
+    textPad.bind("<Control-v>", lambda event: key_disable(textPad, event,"Hello"))
+    textPad.bind("<Control-c>", lambda event: key_disable(textPad, event,"Hello"))
+    textPad.bind("<Shift_L>", lambda event: key_shift(textPad, event,"Hello"))
+    textPad.bind("<Delete>", lambda event: key_disable(textPad, event,"Hello"))
+    textPad.bind("<Insert>", lambda event: key_disable(textPad, event,"Hello"))
+    textPad.bind("<Return>", lambda event: key_enter(textPad, event,"Hello"))
+    textPad.bind("<BackSpace>", lambda event: key_backspace(textPad, event,"Hello"))
+    textPad.bind("<Key>", lambda event: key_press(textPad, event,"Hello"))
+    textPad.bind("<KeyRelease>", lambda event: key(textPad, event,"Hello"))
 
 
     textPad.pack()
     root.mainloop()
 
+if __name__ == "__main__":
+    run_gui("127.0.0.1","test.txt")
