@@ -128,4 +128,3 @@ def run_gui(text=""):
     textPad.pack()
     root.mainloop()
 
-run_gui()
