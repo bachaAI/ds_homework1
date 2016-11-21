@@ -81,7 +81,6 @@ def key_shift(event):
     shiftFlag = True
 
 def key(event):
-    print event.keycode
     global disableFlag
     global shiftFlag
     if disableFlag == True:
@@ -89,25 +88,35 @@ def key(event):
         if event.keycode != 37:
             disableFlag = False
     else:
+        #print event.keycode
         #Shift handling
         if shiftFlag == True:
             print "shift"
-        #Block output for Arrows keys
-        if event.keycode == 113 or event.keycode == 114 or \
-                event.keycode == 112 or event.keycode == 116:
-            return
-        #Block output for Ctrl
-        if event.keycode == 37:
-            return
-        #Block output for v if Ctrl pressed
-        textPad.config(state=NORMAL)
-        s = textPad.index(INSERT)
-        point_index = s.index(".")
-        index1 = int(s[:point_index])
-        index2 = int(s[point_index+1:])
-        out = textPad.get("%d.%d" % (index1, index2 - 1), "%d.%d" % (index1, index2))
-        if out:
-            print "%d.%d" % (index1, index2 - 1), out
+            s = textPad.index(INSERT)
+            output(s)
+            shiftFlag = False
+        else:
+            #Block output for Arrows keys
+            if event.keycode == 113 or event.keycode == 114 or \
+                    event.keycode == 112 or event.keycode == 116:
+                return
+            #Block output for Ctrl, Shift, BackSpace
+            if event.keycode == 37 or event.keycode == 50 or \
+                            event.keycode == 22:
+                return
+            #Block output for v if Ctrl pressed
+            textPad.config(state=NORMAL)
+            s = textPad.index(INSERT)
+            output(s)
+
+def output(s):
+    point_index = s.index(".")
+    index1 = int(s[:point_index])
+    index2 = int(s[point_index + 1:])
+    out = textPad.get("%d.%d" % (index1, index2 - 1), "%d.%d" % (index1, index2))
+    if out:
+        print "%d.%d" % (index1, index2 - 1), out
+
 
 def key_press(event):
     textPad.config(state=DISABLED)

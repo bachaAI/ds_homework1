@@ -7,6 +7,14 @@ class File:
         for elem in string_list:
             self.rows.append(elem)
 
+    def parse_triple(self, triple):
+        left_index = triple.index(",")
+        right_index = triple.rindex(",")
+        i = int(triple[:left_index])
+        j = int(triple[left_index+1:right_index])
+        char = triple[right_index+1:]
+        return (i,j,char)
+
     def change(self, i, j, char):
         last_column = len(self.rows) - 1
         if char == "bs":
@@ -42,16 +50,21 @@ class File:
                 self.rows.append(line[:-1])
 
 if __name__ == "__main__":
-    s1 = "a" * 100
-    s2 = "q" * 100
-    s3 = "w" * 100
+    s1 = "a" * 5
+    s2 = "q" * 30
+    s4 = ""
+    s3 = "w" * 40
     l = []
     l.append(s1)
     l.append(s2)
+    l.append(s4)
     l.append(s3)
     f = File(l)
-    f.insert(0, 12, "b")
+    triple = f.parse_triple("2,0,a")
+    f.change(triple[0], triple[1], triple[2])
     for elem in f.rows:
         print elem
+
+
 
 pass
