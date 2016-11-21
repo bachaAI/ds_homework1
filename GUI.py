@@ -8,21 +8,9 @@ import time
 disableFlag = False
 shiftFlag = False
 
-#keybord_string = "qwertyuiopasdfghjklzxcvbnm"
-#[]{};:''|<>,./?1234567890-=!@#$%^&*()_+\\`~
 root = Tkinter.Tk(className=" Collaborative Text Editor")
 textPad = ScrolledText(root, width=100, height=80)
 
-
-
-''' Uploading of file received from server
-
-contents = file.read()
-textPad.insert('1.0', contents)
-file.close()
-
-'''
-# create a menu & define functions for each menu item
 
 def open_command():
     file = tkFileDialog.askopenfile(parent=root, mode='rb', title='Select a file')
@@ -30,8 +18,6 @@ def open_command():
         contents = file.read()
         textPad.insert('1.0', contents)
         file.close()
-
-
 def save_command(self):
     file = tkFileDialog.asksaveasfile(mode='w')
     if file != None:
@@ -39,39 +25,31 @@ def save_command(self):
         data = self.textPad.get('1.0', END + '-1c')
         file.write(data)
         file.close()
-
-
 def exit_command():
     if tkMessageBox.askokcancel("Quit", "Do you really want to quit?"):
         root.destroy()
-
-
 def about_command():
     label = tkMessageBox.showinfo("About", "Collaborative text editor \n Developed by Bachinskiy A., Shapaval R., \
                                     Shuchorukov M., Tkachuk D. using Tk.tkinter.\n No rights left to reserve :)")
 
-
-
-def getText():
-     return textPad.get(1.0, END)
+#Here come all button handlers
 
 def key_enter(event):
     s = textPad.index(INSERT)
     print s
 
 def key_backspace(event):
+    print "backspace"
     s = textPad.index(INSERT)
     point_index = s.index(".")
     index1 = int(s[:point_index])
     index2 = int(s[point_index + 1:])
-    #out = textPad.get("%d.%d" % (index1, index2 - 1), "%d.%d" % (index1, index2))
     print "%d.%d" % (index1, index2 - 1)
 
 def key_disable(event):
     textPad.config(state=DISABLED)
     global disableFlag
     disableFlag = True
-
 
 def mouse_button(event):
     textPad.config(state=NORMAL)
@@ -104,7 +82,6 @@ def key(event):
             if event.keycode == 37 or event.keycode == 50 or \
                             event.keycode == 22:
                 return
-            #Block output for v if Ctrl pressed
             textPad.config(state=NORMAL)
             s = textPad.index(INSERT)
             output(s)
