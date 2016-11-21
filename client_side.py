@@ -43,9 +43,13 @@ import tkFileDialog
 import tkMessageBox
 
 
-
+SOCKETS = [50001, 50002, 50003]
 
 if __name__ == '__main__':
+
+    print 'Application started'
+
+    """
     print 'Application started'
     # ---------- Starting User dialog ----------
     exit0 = 0
@@ -56,6 +60,7 @@ if __name__ == '__main__':
             exit1 = 0
             while exit1 == 0:
                 f_name = raw_input('Enter file name: ')
+
                 #request to the server for creating new file if curent name is free
                 #server ansver
                 s_ans = 'ok'
@@ -89,18 +94,27 @@ if __name__ == '__main__':
             exit0 = 1
         else:
             print 'Wront choice, try again!'
+
     #--------------------------------------
+    """
     s = socket(AF_INET, SOCK_STREAM)
     print 'TCP Socket created'
 
     # No binding needed for client, OS will bind the socket automatically
     # when connect is issued
 
-    server_address = ('',50000)
+    #server_address = ('', 50001)
 
     # Connecting ...
+    for elem in SOCKETS:
+        server_address = ('172.31.132.48', elem)
+        #server_address = ('127.0.1.1', elem)
+        if s.connect(server_address):
+            break
+        else:
+            print "Server is busy"
     try:
-        s.connect(server_address)
+        #s.connect(server_address)
         decision = ''
         filename = ''
         password = ''
