@@ -37,10 +37,9 @@ from socket import AF_INET, SOCK_STREAM, socket
 from socket import error as SocketError
 import GUI
 import Tkinter
-from Tkinter import *
 from ScrolledText import *
-import tkFileDialog
-import tkMessageBox
+
+
 
 
 SOCKETS = [50001, 50002, 50003]
@@ -93,6 +92,7 @@ if __name__ == '__main__':
                     print 'There is no file with this name on server, try again!'
             exit0 = 1
         else:
+
             print 'Wront choice, try again!'
 
     #--------------------------------------
@@ -103,9 +103,11 @@ if __name__ == '__main__':
     # No binding needed for client, OS will bind the socket automatically
     # when connect is issued
 
-    #server_address = ('', 50001)
+    server_address = ('172.31.132.48', 50001)
 
     # Connecting ...
+    '''
+
     for elem in SOCKETS:
         server_address = ('172.31.132.48', elem)
         #server_address = ('127.0.1.1', elem)
@@ -113,8 +115,9 @@ if __name__ == '__main__':
             break
         else:
             print "Server is busy"
+    '''
     try:
-        #s.connect(server_address)
+        s.connect(server_address)
         decision = ''
         filename = ''
         password = ''
