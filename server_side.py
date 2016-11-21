@@ -121,8 +121,6 @@ class Server:
 
 
 
-
-
 if __name__ == '__main__':
     s = Server()
     thread1 = Thread(target=s.open_socket(), args= s.port1)
