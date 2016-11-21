@@ -103,7 +103,7 @@ if __name__ == '__main__':
     # No binding needed for client, OS will bind the socket automatically
     # when connect is issued
 
-    server_address = ('172.31.132.48', 50001)
+    server_address = ('172.31.128.202', 50001)
 
     # Connecting ...
     '''
@@ -132,16 +132,31 @@ if __name__ == '__main__':
             s.send(filename)
             s.send(password)
             f = open(filename, 'rb')
+            print 'Yo!'
             l = f.read(1024)
             while (l):
                 s.send(l)
                 print('Sent ', repr(l))
                 l = f.read(1024)
             print 'Done sending'
+
         elif decision == '2':
-            print '2'
+            filename = raw_input('Please, enter a name of the file to create: ')
+            password = raw_input('Set a password for a file:')
+            s.send(filename)
+            s.send(password)
+
         elif decision=='3':
-            print '3'
+            filename = raw_input('Please, enter a file name: ')
+            password = raw_input('Please enter password of a file:')
+            with open(str(filename), 'wb') as f:
+                while True:
+                    data = s.recv(1024)
+                    if not data:
+                        break
+                    print('reciving data...')
+                    f.write(data)
+
         else:
             print 'Wrong input.'
 
