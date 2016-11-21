@@ -2,8 +2,6 @@ from socket import AF_INET, SOCK_STREAM, socket
 from socket import error as SocketErrors
 from text_file import File
 from class_queue import Queue
-from os import getpid
-import select
 import sys
 from threading import Thread
 
@@ -19,7 +17,7 @@ class Server:
         self.size = 1024     # max message size
         self.server = None
         self.threads = []
-        text = File()
+        #text = File()
 
 
     def file_syncronization(self, triple, text, client_socket, queue, port):
@@ -27,41 +25,44 @@ class Server:
         if port == self.port1:
             queue.add_user1(triple)
             text.change(triple)
-            if queue.q_user2.__len__() != 0:
+            while queue.q_user2.__len__() != 0:
                 client_socket.send(queue.take2())
-            if queue.q_user3.__len__() != 0:
+            while queue.q_user3.__len__() != 0:
                 client_socket.send(queue.take3())
 
 
         if port == self.port2:
             queue.add_user2(triple)
             text.change(triple)
-            if queue.q_user1.__len__() != 0:
+            while queue.q_user1.__len__() != 0:
                 client_socket.send(queue.take1())
-            if queue.q_user3.__len__() != 0:
+            while queue.q_user3.__len__() != 0:
                 client_socket.send(queue.take3())
 
         if port == self.port3:
             queue.add_user3(triple)
             text.change(triple)
-            if queue.q_user1.__len__() != 0:
+            while queue.q_user1.__len__() != 0:
                 client_socket.send(queue.take1())
-            if queue.q_user2.__len__() != 0:
+            while queue.q_user2.__len__() != 0:
                 client_socket.send(queue.take2())
 
-    def edit_function(self,text, client_socket, port):
+    def edit_function(self, text, client_socket, port):
         triple = ''
         if client_socket.recv(triple):
             queue = Queue()
             self.file_syncronization(triple, text, client_socket, queue, port)
 
-    def open_socket(self,port):
+    def open_socket(self, port):
         try:
+            print port
             self.server = socket(AF_INET, SOCK_STREAM)
             self.server.bind((self.host, port))
             self.server.listen(self.backlog)
+            print 'Lets Go!'
             while True:
                 client_socket, client_addr = self.server.accept()
+                print 'New Client has been connected!'
                 client_socket.send('Please enter 1 if you want to Upload New File.\n'
                                    'Please enter 2 if you want to Create New File.\n'
                                    'Please enter 3 if you want to Download Existed File.\n')
@@ -84,7 +85,7 @@ class Server:
                             f.write(data)
                     text = File()
                     text.download_from_txt(filename)
-                    self.edit_function(text,client_socket,port)
+                    self.edit_function(text, client_socket, port)
 
 
 
@@ -100,18 +101,16 @@ class Server:
                     client_socket.recv(filename)
                     client_socket.recv(password)
                     text = open(filename, 'rb')
-                    if password == password_file:
-                       l = text.read(1024)
-                       while (l):
+                    #if password == password_file:
+                    l = text.read(1024)
+                    while (l):
                            client_socket.send(l)
                            print('Sent ', repr(l))
                            l = f.read(1024)
-                       self.edit_function(text, client_socket, port)
+                    self.edit_function(text, client_socket, port)
 
                 else:
                     client_socket.send('You have made wrong decision. Good luck!\n')
-
-
 
         except SocketErrors, (value, message):
             if self.server:
@@ -123,9 +122,9 @@ class Server:
 
 if __name__ == '__main__':
     s = Server()
-    thread1 = Thread(target=s.open_socket(), args= s.port1)
-    thread2 = Thread(target=s.open_socket(), args= s.port2)
-    thread3 = Thread(target=s.open_socket(), args= s.port3)
+    thread1 = Thread(target=s.open_socket, args=(s.port1,))
+    thread2 = Thread(target=s.open_socket, args=(s.port2,))
+    thread3 = Thread(target=s.open_socket, args=(s.port3,))
     s.threads.append(thread1)
     s.threads.append(thread2)
     s.threads.append(thread3)
@@ -133,7 +132,7 @@ if __name__ == '__main__':
         t.start()
     for t in s.threads:
         t.join()
-    print 'Servers started!'
+    print 'Servers are dead!'
 
 
     #############################################
