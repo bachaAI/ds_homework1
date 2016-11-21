@@ -9,7 +9,7 @@ from threading import Thread
 
 class Server:
     def __init__(self):
-        self.host = '172.31.132.48'       # ip server's address
+        self.host = '172.31.128.202'       # ip server's address
         self.port1 = 50001    # server's port
         self.port2 = 50002
         self.port3 = 50003
@@ -66,15 +66,13 @@ class Server:
                 #client_socket.send('Please enter 1 if you want to Upload New File.\n'
                                   # 'Please enter 2 if you want to Create New File.\n'
                                    #'Please enter 3 if you want to Download Existed File.\n')
-                decision = ''
-                filename = ''
-                password = ''
+
                 print 'BOOM!'
-                client_socket.recv(decision)
+                decision = client_socket.recv(1024)
                 print decision
                 if decision == '1':
-                    client_socket.recv(filename)
-                    client_socket.recv(password)
+                    filename = client_socket.recv(1024)
+                    password = client_socket.recv(1024)
                     with open(str(filename), 'wb') as f:
                         print 'file %s opened' % str(filename)
                         while True:
