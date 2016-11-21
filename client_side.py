@@ -35,7 +35,7 @@ if __name__ == "__main__":
 
 from socket import AF_INET, SOCK_STREAM, socket
 from socket import error as SocketError
-
+import GUI
 import Tkinter
 from Tkinter import *
 from ScrolledText import *
@@ -135,6 +135,7 @@ if __name__ == '__main__':
                 print('Sent ', repr(l))
                 l = f.read(1024)
             print 'Done sending'
+            GUI.run_gui()
         elif decision == '2':
             print '2'
         elif decision=='3':
