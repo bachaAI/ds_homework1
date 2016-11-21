@@ -8,10 +8,6 @@ import time
 disableFlag = False
 shiftFlag = False
 
-root = Tkinter.Tk(className=" Collaborative Text Editor")
-textPad = ScrolledText(root, width=100, height=80)
-
-
 def open_command():
     file = tkFileDialog.askopenfile(parent=root, mode='rb', title='Select a file')
     if file != None:
@@ -100,31 +96,35 @@ def key_press(event):
     time.sleep(0.2)
     textPad.config(state=NORMAL)
 
+def run_gui(text=""):
+    root = Tkinter.Tk(className=" Collaborative Text Editor")
+    textPad = ScrolledText(root, width=100, height=80)
+    menu = Menu(root)
+    root.config(menu=menu)
+    filemenu = Menu(menu)
+    menu.add_cascade(label="File", menu=filemenu)
+    filemenu.add_command(label="Open...", command=open_command)
+    filemenu.add_command(label="Save", command=save_command)
+    filemenu.add_separator()
+    filemenu.add_command(label="Exit", command=exit_command)
+    helpmenu = Menu(menu)
+    menu.add_cascade(label="Help", menu=helpmenu)
+    helpmenu.add_command(label="About...", command=about_command)
+    #Insert given text
+    textPad.insert(END,text)
+    #Keybord bindings to virtual events
+    textPad.bind("<Button-1>",mouse_button)
+    textPad.bind("<Control-v>", key_disable)
+    textPad.bind("<Control-c>", key_disable)
+    textPad.bind("<Shift_L>", key_shift)
+    textPad.bind("<Delete>", key_disable)
+    textPad.bind("<Insert>", key_disable)
+    textPad.bind("<Return>", key_enter)
+    textPad.bind("<BackSpace>", key_backspace)
+    textPad.bind("<Key>", key_press)
+    textPad.bind("<KeyRelease>", key)
 
-menu = Menu(root)
-root.config(menu=menu)
-filemenu = Menu(menu)
-menu.add_cascade(label="File", menu=filemenu)
-filemenu.add_command(label="Open...", command=open_command)
-filemenu.add_command(label="Save", command=save_command)
-filemenu.add_separator()
-filemenu.add_command(label="Exit", command=exit_command)
-helpmenu = Menu(menu)
-menu.add_cascade(label="Help", menu=helpmenu)
-helpmenu.add_command(label="About...", command=about_command)
 
-#Keybord bindings to virtual events
-textPad.bind("<Button-1>",mouse_button)
-textPad.bind("<Control-v>", key_disable)
-textPad.bind("<Control-c>", key_disable)
-textPad.bind("<Shift_L>", key_shift)
-textPad.bind("<Delete>", key_disable)
-textPad.bind("<Insert>", key_disable)
-textPad.bind("<Return>", key_enter)
-textPad.bind("<BackSpace>", key_backspace)
-textPad.bind("<Key>", key_press)
-textPad.bind("<KeyRelease>", key)
+    textPad.pack()
+    root.mainloop()
 
-
-textPad.pack()
-root.mainloop()
