@@ -1,6 +1,7 @@
 from socket import AF_INET, SOCK_STREAM, socket
 from socket import error as SocketErrors
 from text_file import File
+from class_queue import Queue
 from os import getpid
 import select
 import sys
@@ -11,37 +12,53 @@ from threading import Thread
 class Server:
     def __init__(self):
         self.host = ''       # ip server's address
-        self.port = 50000    # server's port
-        self.backlog = 2     # at most server will work with three clients
+        self.port1 = 50001    # server's port
+        self.port2 = 50002
+        self.port3 = 50003
+        self.backlog = 0     # at most server will work with three clients
         self.size = 1024     # max message size
         self.server = None
         self.threads = []
         text = File()
 
 
-    def file_syncronization(self, triple, text, client_socket, threads,queue):
-        client_socket.recv(triple)
-        for elem in threads:
-            if elem.getName() == 'Thread-1':
-                queue.add_user1(triple)
-                text.change(triple)
+    def file_syncronization(self, triple, text, client_socket, queue, port):
 
-            if elem.getName() == 'Thread-2':
-                queue.add_user2(triple)
-                text.change(triple)
+        if port == self.port1:
+            queue.add_user1(triple)
+            text.change(triple)
+            if queue.q_user2.__len__() != 0:
+                client_socket.send(queue.take2())
+            if queue.q_user3.__len__() != 0:
+                client_socket.send(queue.take3())
 
-            if elem.getName() == 'Thread-3':
-                queue.add_user3(triple)
-                text.change(triple)
 
-    def edit_function(self,text, client_socket,triple):
-        if client_socket.recv(triple)
-            self.file_syncronization(triple, text)
+        if port == self.port2:
+            queue.add_user2(triple)
+            text.change(triple)
+            if queue.q_user1.__len__() != 0:
+                client_socket.send(queue.take1())
+            if queue.q_user3.__len__() != 0:
+                client_socket.send(queue.take3())
 
-    def open_socket(self):
+        if port == self.port3:
+            queue.add_user3(triple)
+            text.change(triple)
+            if queue.q_user1.__len__() != 0:
+                client_socket.send(queue.take1())
+            if queue.q_user2.__len__() != 0:
+                client_socket.send(queue.take2())
+
+    def edit_function(self,text, client_socket, port):
+        triple = ''
+        if client_socket.recv(triple):
+            queue = Queue()
+            self.file_syncronization(triple, text, client_socket, queue, port)
+
+    def open_socket(self,port):
         try:
             self.server = socket(AF_INET, SOCK_STREAM)
-            self.server.bind((self.host, self.port))
+            self.server.bind((self.host, port))
             self.server.listen(self.backlog)
             while True:
                 client_socket, client_addr = self.server.accept()
@@ -65,16 +82,18 @@ class Server:
                             print('data:', (data))
                             # write data to a file
                             f.write(data)
-                    text = open(filename, 'rb')
-                    self.edit_function(text)
+                    text = File()
+                    text.download_from_txt(filename)
+                    self.edit_function(text,client_socket,port)
+
 
 
 
                 elif decision == '2':
                     client_socket.recv(filename)
                     client_socket.recv(password)
-                    text = open(filename, 'rb')
-                    self.edit_function(text)
+                    text = File()
+                    self.edit_function(text, client_socket, port)
 
 
                 elif decision == '3':
@@ -87,7 +106,7 @@ class Server:
                            client_socket.send(l)
                            print('Sent ', repr(l))
                            l = f.read(1024)
-                       self.edit_function(text)
+                       self.edit_function(text, client_socket, port)
 
                 else:
                     client_socket.send('You have made wrong decision. Good luck!\n')
@@ -102,48 +121,20 @@ class Server:
 
 
 
-    def run(self):
-        self.open_socket()
-        input = [self.server]
-        running = 1
-        while running:
-            in_ready, out_ready, except_ready = select.select(input, [], [])
-
-            # in_ready: wait until ready for reading
-            # out_ready: wait until ready for writing
-            # except_ready: wait for an “exceptional condition”
-
-            for s in in_ready:
-
-                if s == self.server:
-                    # handle the server socket
-                    c = Client(self.server.accept())
-                    c.start()
-                    self.threads.append(c)
-                    for c in self.threads:
-                        c.join()
-                elif SocketErrors:
-                    running = 0
-                    self.server.close()
-
-
-
-    def open_socket_edition(self):
-        try:
-            self.server = socket(AF_INET, SOCK_STREAM)
-            self.server.bind((self.host, self.port))
-            while True:
-               self.server.listen(self.backlog)
-               thread = Thread(target=self.open_socket(), args=)
-               thread.start()
-               self.threads.append(thread)
-            for t in self.threads:
-                t.join()
 
 if __name__ == '__main__':
     s = Server()
-    s.run()
-    print 'Server started!'
+    thread1 = Thread(target=s.open_socket(), args= s.port1)
+    thread2 = Thread(target=s.open_socket(), args= s.port2)
+    thread3 = Thread(target=s.open_socket(), args= s.port3)
+    s.threads.append(thread1)
+    s.threads.append(thread2)
+    s.threads.append(thread3)
+    for t in s.threads:
+        t.start()
+    for t in s.threads:
+        t.join()
+    print 'Servers started!'
 
 
     #############################################
