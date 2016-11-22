@@ -169,7 +169,18 @@ if __name__ == '__main__':
 
         #file_name = raw_input('Please, enter a name of the file to upload:')
 
-
+        #while loop for receiving from socket
+        while True:
+            #receive from socket
+            res_data = s.recv()
+            # analyse data
+            if res_data:
+                gui.insert()
+            to_send = qeue.pop()
+            s.send(to_send)
+            #insert into GUI
+            #pop from queue
+            #send to server
     except SocketError:
         print " Communication ERROR "
 

@@ -13,7 +13,7 @@ class File:
         i = int(triple[:left_index])
         j = int(triple[left_index+1:right_index])
         char = triple[right_index+1:]
-        return (i,j,char)
+        return (i, j, char)
 
     def show(self):
         for row in self.rows:
