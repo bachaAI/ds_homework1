@@ -149,18 +149,17 @@ if __name__ == '__main__':
             print result
             text = text_file.File()
             text.download_from_txt(f)
-            queue = []
-            GUI.run_gui(queue,f)
+            client_GUI = GUI(f)
             while True:
-                if queue:
-                    triple = queue.pop(0)
+                if client_GUI.queue:
+                    triple = client_GUI.queue.pop(0)
                     s.send(triple)
                     break
             while True:
                 triple = s.recv(1024)
                 insert = text.parse_triple(triple)
                 text.change(insert[0],insert[1],insert[2])
-
+                client_GUI.textPad.INSERT("%d.%d" % (insert[0], insert[1]),insert[2])
                 if triple == "STOP":
                     break
 
