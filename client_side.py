@@ -139,7 +139,7 @@ if __name__ == '__main__':
                 s.send(l)
                 print('Sent ', repr(l))
                 if not l:
-                    s.shutdown(SHUT_WR)
+                    s.send('STOP')
                     break
             print 'Done sending'
             result = s.recv(1024)

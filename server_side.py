@@ -24,8 +24,10 @@ class Server:
 
         if port == self.port1:
             queue.add_user1(triple)
-            text.change(triple)
-            print triple
+            i,j,elem = text.parse_triple(triple)
+            text.change(i,j,elem)
+            #text.show()
+            #print triple
             while queue.q_user2.__len__() != 0:
                 client_socket.send(queue.take2())
             while queue.q_user3.__len__() != 0:
@@ -49,11 +51,13 @@ class Server:
                 client_socket.send(queue.take2())
 
     def edit_function(self, text, client_socket, port):
-        triple = client_socket.recv(1024)
-        print triple
-        if triple:
-            queue = Queue()
-            self.file_syncronization(triple, text, client_socket, queue, port)
+        while True:
+
+            triple = client_socket.recv(1024)
+            #print triple
+            if triple:
+                queue = Queue()
+                self.file_syncronization(triple, text, client_socket, queue, port)
 
     def open_socket(self, port):
         try:
@@ -77,17 +81,18 @@ class Server:
                     password = client_socket.recv(1024)
                     with open(str('FileNew.txt'), 'wb') as f:
                         print 'file %s opened' % str('FileNew.txt')
-                        while True:
-                            data = client_socket.recv(1024)
-                            print data
-                            if not data:
-                                break
+                        data = client_socket.recv(1024)
+                        while data:
                             print('receiving data...')
                             print('data:', (data))
                             f.write(data)
+                            data = client_socket.recv(1024)
+                            if data == 'STOP':
+                                print data
+                                break
                     f.close()
+                    client_socket.send('OKEY!')
                     print 'Ooooops!'
-                    client_socket.send('File received!')
                     text = File()
                     text.download_from_txt('FileNew.txt')
                     self.edit_function(text, client_socket, port)
