@@ -30,31 +30,29 @@ def about_command():
 
 #Here come all button handlers
 
-def key_enter(event):
+def key_enter(textPad, event, queue):
     s = textPad.index(INSERT)
-    print s
+    add_to_queue(textPad,s,queue,"ent")
 
-def key_backspace(event):
-    print "backspace"
+
+def key_backspace(textPad, event, queue):
     s = textPad.index(INSERT)
-    point_index = s.index(".")
-    index1 = int(s[:point_index])
-    index2 = int(s[point_index + 1:])
-    print "%d.%d" % (index1, index2 - 1)
+    add_to_queue(textPad,s,queue,"bs")
 
-def key_disable(event):
+def key_disable(textPad, event):
     textPad.config(state=DISABLED)
     global disableFlag
     disableFlag = True
 
-def mouse_button(event):
+def mouse_button(textPad, event):
     textPad.config(state=NORMAL)
 
-def key_shift(event):
+def key_shift(textPad, event):
     global shiftFlag
     shiftFlag = True
 
-def key(event):
+def key(textPad, event, queue):
+    #print event.keycode
     global disableFlag
     global shiftFlag
     if disableFlag == True:
@@ -65,9 +63,8 @@ def key(event):
         #print event.keycode
         #Shift handling
         if shiftFlag == True:
-            print "shift"
             s = textPad.index(INSERT)
-            output(s)
+            add_to_queue(textPad, s, queue)
             shiftFlag = False
         else:
             #Block output for Arrows keys
@@ -76,27 +73,33 @@ def key(event):
                 return
             #Block output for Ctrl, Shift, BackSpace
             if event.keycode == 37 or event.keycode == 50 or \
-                            event.keycode == 22:
+                            event.keycode == 22 or event.keycode == 36:
                 return
             textPad.config(state=NORMAL)
             s = textPad.index(INSERT)
-            output(s)
+            add_to_queue(textPad, s, queue)
 
-def output(s):
+def add_to_queue(textPad, s, queue, key=""):
     point_index = s.index(".")
     index1 = int(s[:point_index])
     index2 = int(s[point_index + 1:])
     out = textPad.get("%d.%d" % (index1, index2 - 1), "%d.%d" % (index1, index2))
-    if out:
-        print "%d.%d" % (index1, index2 - 1), out
+    if key:
+        if key == "ent":
+            queue.append("%d,%d,%s" % (index1, index2, key))
+        if key == "bs":
+            queue.append("%d,%d,%s" % (index1, index2-1, key))
+    else:
+        queue.append("%d,%d,%s" % (index1, index2-1, out))
+    print queue
 
 
-def key_press(event):
+def key_press(textPad, event):
     textPad.config(state=DISABLED)
     time.sleep(0.2)
     textPad.config(state=NORMAL)
 
-def run_gui(text=""):
+def run_gui(queue, file=""):
     root = Tkinter.Tk(className=" Collaborative Text Editor")
     textPad = ScrolledText(root, width=100, height=80)
     menu = Menu(root)
@@ -111,20 +114,24 @@ def run_gui(text=""):
     menu.add_cascade(label="Help", menu=helpmenu)
     helpmenu.add_command(label="About...", command=about_command)
     #Insert given text
-    textPad.insert(END,text)
+    if file:
+        f = open(file, 'r')
+        textPad.insert(END,f.read())
     #Keybord bindings to virtual events
-    textPad.bind("<Button-1>",mouse_button)
-    textPad.bind("<Control-v>", key_disable)
-    textPad.bind("<Control-c>", key_disable)
-    textPad.bind("<Shift_L>", key_shift)
-    textPad.bind("<Delete>", key_disable)
-    textPad.bind("<Insert>", key_disable)
-    textPad.bind("<Return>", key_enter)
-    textPad.bind("<BackSpace>", key_backspace)
-    textPad.bind("<Key>", key_press)
-    textPad.bind("<KeyRelease>", key)
+    textPad.bind("<Button-1>",lambda event: mouse_button(textPad, event))
+    textPad.bind("<Control-v>", lambda event: key_disable(textPad, event))
+    textPad.bind("<Control-c>", lambda event: key_disable(textPad, event))
+    textPad.bind("<Shift_L>", lambda event: key_shift(textPad, event))
+    textPad.bind("<Delete>", lambda event: key_disable(textPad, event))
+    textPad.bind("<Insert>", lambda event: key_disable(textPad, event))
+    textPad.bind("<Return>", lambda event: key_enter(textPad, event,queue))
+    textPad.bind("<BackSpace>", lambda event: key_backspace(textPad, event,queue))
+    textPad.bind("<Key>", lambda event: key_press(textPad, event))
+    textPad.bind("<KeyRelease>", lambda event: key(textPad, event,queue))
 
 
     textPad.pack()
     root.mainloop()
 
+if __name__ == "__main__":
+    run_gui([],"")
