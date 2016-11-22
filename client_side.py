@@ -37,6 +37,7 @@ from socket import AF_INET, SOCK_STREAM, socket, SHUT_WR
 from socket import error as SocketError
 from class_queue import Queue
 import GUI
+import text_file
 
 import Tkinter
 from ScrolledText import *
@@ -146,10 +147,22 @@ if __name__ == '__main__':
             print 'Done sending'
             result = s.recv(1024)
             print result
-            #open file
-            #start GUI
-            #send(triple)
-            #recv(triple)
+            text = text_file.File()
+            text.download_from_txt(f)
+            queue = []
+            GUI.run_gui(queue,f)
+            while True:
+                if queue:
+                    triple = queue.pop(0)
+                    s.send(triple)
+                    break
+            while True:
+                triple = s.recv(1024)
+                insert = text.parse_triple(triple)
+                text.change(insert[0],insert[1],insert[2])
+
+                if triple == "STOP":
+                    break
 
             triple = '0,2,R'
             s.send(triple)
