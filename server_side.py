@@ -9,7 +9,7 @@ from threading import Thread
 
 class Server:
     def __init__(self):
-        self.host = '172.31.128.202'       # ip server's address
+        self.host = '172.20.10.3'       # ip server's address
         self.port1 = 50001    # server's port
         self.port2 = 50002
         self.port3 = 50003
@@ -26,7 +26,7 @@ class Server:
             queue.add_user1(triple)
             i,j,elem = text.parse_triple(triple)
             text.change(i,j,elem)
-            #text.show()
+            text.show()
             #print triple
             while queue.q_user2.__len__() != 0:
                 client_socket.send(queue.take2())
@@ -86,7 +86,7 @@ class Server:
                             print('data:', (data))
                             f.write(data)
                             data = client_socket.recv(1024)
-                            if data == 'STOP':
+                            if data[-4:] == 'STOP':
                                 print data
                                 break
                     f.close()
@@ -132,11 +132,11 @@ class Server:
 if __name__ == '__main__':
     s = Server()
     thread1 = Thread(target=s.open_socket, args=(s.port1,))
-    #thread2 = Thread(target=s.open_socket, args=(s.port2,))
-    #thread3 = Thread(target=s.open_socket, args=(s.port3,))
+    thread2 = Thread(target=s.open_socket, args=(s.port2,))
+    thread3 = Thread(target=s.open_socket, args=(s.port3,))
     s.threads.append(thread1)
-    #s.threads.append(thread2)
-    #s.threads.append(thread3)
+    s.threads.append(thread2)
+    s.threads.append(thread3)
     for t in s.threads:
         t.start()
     for t in s.threads:
