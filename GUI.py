@@ -44,7 +44,9 @@ class GUI:
         self.textPad.bind("<Key>", self.key_press)
         self.textPad.bind("<KeyRelease>", self.key)
         self.textPad.pack()
+        print "2"
         root.mainloop()
+        print "1"
 
     def save_command(self):
         file = tkFileDialog.asksaveasfile(mode='w')
