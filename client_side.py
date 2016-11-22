@@ -35,6 +35,8 @@ if __name__ == "__main__":
 
 from socket import AF_INET, SOCK_STREAM, socket, SHUT_WR
 from socket import error as SocketError
+from class_queue import Queue
+import GUI
 
 import Tkinter
 from ScrolledText import *
@@ -144,6 +146,11 @@ if __name__ == '__main__':
             print 'Done sending'
             result = s.recv(1024)
             print result
+            #open file
+            #start GUI
+            #send(triple)
+            #recv(triple)
+
             triple = '0,2,R'
             s.send(triple)
 
@@ -167,20 +174,22 @@ if __name__ == '__main__':
             print 'Wrong input.'
 
 
-        #file_name = raw_input('Please, enter a name of the file to upload:')
-
+          #file_name = raw_input('Please, enter a name of the file to upload:')
+        '''
         #while loop for receiving from socket
         while True:
             #receive from socket
             res_data = s.recv()
+            queue = Queue()
             # analyse data
             if res_data:
                 gui.insert()
-            to_send = qeue.pop()
+            to_send = queue.pop()
             s.send(to_send)
             #insert into GUI
             #pop from queue
             #send to server
+            '''
     except SocketError:
         print " Communication ERROR "
 

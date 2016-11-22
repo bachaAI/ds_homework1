@@ -52,7 +52,6 @@ class Server:
 
     def edit_function(self, text, client_socket, port):
         while True:
-
             triple = client_socket.recv(1024)
             #print triple
             if triple:
