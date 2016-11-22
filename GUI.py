@@ -8,20 +8,14 @@ import time
 disableFlag = False
 shiftFlag = False
 
-def open_command():
-    file = tkFileDialog.askopenfile(parent=root, mode='rb', title='Select a file')
-    if file != None:
-        contents = file.read()
-        textPad.insert('1.0', contents)
-        file.close()
-def save_command(self):
+def save_command(textPad):
     file = tkFileDialog.asksaveasfile(mode='w')
     if file != None:
         # slice off the last character from get, as an extra return is added
-        data = self.textPad.get('1.0', END + '-1c')
+        data = textPad.get('1.0', END + '-1c')
         file.write(data)
         file.close()
-def exit_command():
+def exit_command(root):
     if tkMessageBox.askokcancel("Quit", "Do you really want to quit?"):
         root.destroy()
 def about_command():
@@ -79,6 +73,12 @@ def key(textPad, event, queue):
             s = textPad.index(INSERT)
             add_to_queue(textPad, s, queue)
 
+
+def key_press(textPad, event):
+    textPad.config(state=DISABLED)
+    time.sleep(0.2)
+    textPad.config(state=NORMAL)
+
 def add_to_queue(textPad, s, queue, key=""):
     point_index = s.index(".")
     index1 = int(s[:point_index])
@@ -86,18 +86,12 @@ def add_to_queue(textPad, s, queue, key=""):
     out = textPad.get("%d.%d" % (index1, index2 - 1), "%d.%d" % (index1, index2))
     if key:
         if key == "ent":
-            queue.append("%d,%d,%s" % (index1, index2, key))
+            queue.append("%d,%d,%s" % (index1-1, index2, key))
         if key == "bs":
-            queue.append("%d,%d,%s" % (index1, index2-1, key))
+            queue.append("%d,%d,%s" % (index1-1, index2-1, key))
     else:
-        queue.append("%d,%d,%s" % (index1, index2-1, out))
+        queue.append("%d,%d,%s" % (index1-1, index2-1, out))
     print queue
-
-
-def key_press(textPad, event):
-    textPad.config(state=DISABLED)
-    time.sleep(0.2)
-    textPad.config(state=NORMAL)
 
 def run_gui(queue, file=""):
     root = Tkinter.Tk(className=" Collaborative Text Editor")
@@ -106,16 +100,16 @@ def run_gui(queue, file=""):
     root.config(menu=menu)
     filemenu = Menu(menu)
     menu.add_cascade(label="File", menu=filemenu)
-    filemenu.add_command(label="Open...", command=open_command)
-    filemenu.add_command(label="Save", command=save_command)
+    filemenu.add_command(label="Save", command= lambda x=textPad: save_command(x))
     filemenu.add_separator()
-    filemenu.add_command(label="Exit", command=exit_command)
+    filemenu.add_command(label="Exit", command= lambda x=root: exit_command(x))
     helpmenu = Menu(menu)
     menu.add_cascade(label="Help", menu=helpmenu)
     helpmenu.add_command(label="About...", command=about_command)
     #Insert given text
     if file:
         f = open(file, 'r')
+        textPad.insert(END,"\n")
         textPad.insert(END,f.read())
     #Keybord bindings to virtual events
     textPad.bind("<Button-1>",lambda event: mouse_button(textPad, event))
@@ -134,4 +128,4 @@ def run_gui(queue, file=""):
     root.mainloop()
 
 if __name__ == "__main__":
-    run_gui([],"")
+    run_gui([],"test.txt")

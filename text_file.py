@@ -18,9 +18,10 @@ class File:
     def change(self, i, j, char):
         last_column = len(self.rows) - 1
         if char == "bs":
-            if len(self.rows[i]):
+            if len(self.rows[i]) and j != -1:
                 self.rows[i] = self.rows[i][:j-1] + self.rows[i][j:]
-            else:
+            elif j == -1:
+                self.rows[i-1] = self.rows[i-1] + self.rows[i]
                 self.rows.pop(i)
         elif char == "ent":
             self.rows.insert(i+1,"")
@@ -60,11 +61,10 @@ if __name__ == "__main__":
     l.append(s4)
     l.append(s3)
     f = File(l)
-    triple = f.parse_triple("2,0,a")
+    triple = f.parse_triple("2,-1,bs")
     f.change(triple[0], triple[1], triple[2])
     for elem in f.rows:
         print elem
 
 
 
-pass
