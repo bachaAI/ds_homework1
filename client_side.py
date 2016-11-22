@@ -106,7 +106,7 @@ if __name__ == '__main__':
     # No binding needed for client, OS will bind the socket automatically
     # when connect is issued
 
-    server_address = ('172.31.128.202', 50001)
+    server_address = ('172.20.10.3', 50002)
 
     # Connecting ...
     '''
