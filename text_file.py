@@ -2,10 +2,10 @@ class File:
     def __init__(self):
         self.rows = []
 
-    def __init__(self, string_list):
-        self.rows = []
-        for elem in string_list:
-            self.rows.append(elem)
+   # def __init__(self, string_list):
+      #  self.rows = []
+       # for elem in string_list:
+         #   self.rows.append(elem)
 
     def parse_triple(self, triple):
         left_index = triple.index(",")
@@ -14,6 +14,10 @@ class File:
         j = int(triple[left_index+1:right_index])
         char = triple[right_index+1:]
         return (i,j,char)
+
+    def show(self):
+        for row in self.rows:
+            print(row)
 
     def change(self, i, j, char):
         last_column = len(self.rows) - 1

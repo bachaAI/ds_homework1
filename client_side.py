@@ -33,7 +33,7 @@ if __name__ == "__main__":
 
 
 
-from socket import AF_INET, SOCK_STREAM, socket
+from socket import AF_INET, SOCK_STREAM, socket, SHUT_WR
 from socket import error as SocketError
 
 import Tkinter
@@ -129,17 +129,23 @@ if __name__ == '__main__':
         s.send(decision)
         if decision == '1':
             filename=raw_input('Enter file name: ')
-            password=raw_input('Set password: ')
             s.send(filename)
+            password=raw_input('Set password: ')
             s.send(password)
             f = open(filename, 'rb')
             print 'Yo!'
-            l = f.read(1024)
-            while (l):
+            while True:
+                l = f.read(1024)
                 s.send(l)
                 print('Sent ', repr(l))
-                l = f.read(1024)
+                if not l:
+                    s.send('STOP')
+                    break
             print 'Done sending'
+            result = s.recv(1024)
+            print result
+            triple = '0,2,R'
+            s.send(triple)
 
         elif decision == '2':
             filename = raw_input('Please, enter a name of the file to create: ')
