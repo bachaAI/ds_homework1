@@ -25,6 +25,7 @@ class Server:
         if port == self.port1:
             queue.add_user1(triple)
             text.change(triple)
+            print triple
             while queue.q_user2.__len__() != 0:
                 client_socket.send(queue.take2())
             while queue.q_user3.__len__() != 0:
@@ -48,8 +49,9 @@ class Server:
                 client_socket.send(queue.take2())
 
     def edit_function(self, text, client_socket, port):
-        triple = ''
-        if client_socket.recv(triple):
+        triple = client_socket.recv(1024)
+        print triple
+        if triple:
             queue = Queue()
             self.file_syncronization(triple, text, client_socket, queue, port)
 
@@ -73,18 +75,21 @@ class Server:
                 if decision == '1':
                     filename = client_socket.recv(1024)
                     password = client_socket.recv(1024)
-                    with open(str(filename), 'wb') as f:
-                        print 'file %s opened' % str(filename)
+                    with open(str('FileNew.txt'), 'wb') as f:
+                        print 'file %s opened' % str('FileNew.txt')
                         while True:
                             data = client_socket.recv(1024)
+                            print data
                             if not data:
                                 break
                             print('receiving data...')
                             print('data:', (data))
-                            # write data to a file
                             f.write(data)
+                    f.close()
+                    print 'Ooooops!'
+                    client_socket.send('File received!')
                     text = File()
-                    text.download_from_txt(filename)
+                    text.download_from_txt('FileNew.txt')
                     self.edit_function(text, client_socket, port)
 
 
@@ -123,11 +128,11 @@ class Server:
 if __name__ == '__main__':
     s = Server()
     thread1 = Thread(target=s.open_socket, args=(s.port1,))
-    thread2 = Thread(target=s.open_socket, args=(s.port2,))
-    thread3 = Thread(target=s.open_socket, args=(s.port3,))
+    #thread2 = Thread(target=s.open_socket, args=(s.port2,))
+    #thread3 = Thread(target=s.open_socket, args=(s.port3,))
     s.threads.append(thread1)
-    s.threads.append(thread2)
-    s.threads.append(thread3)
+    #s.threads.append(thread2)
+    #s.threads.append(thread3)
     for t in s.threads:
         t.start()
     for t in s.threads:
