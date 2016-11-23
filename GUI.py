@@ -181,3 +181,4 @@ class GUI:
 
 if __name__ == "__main__":
     gui = GUI("test.txt","127")
+    pass
