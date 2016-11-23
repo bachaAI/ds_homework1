@@ -136,8 +136,8 @@ class GUI:
                 shiftFlag = False
             else:
                 #Block output for Arrows keys
-                if event.keycode == 113 or event.keycode == 114 or \
-                        event.keycode == 112 or event.keycode == 116:
+                if event.keycode == 104 or event.keycode == 100 or \
+                        event.keycode == 102 or event.keycode == 98:
                     return
                 #Block output for Ctrl, Shift, BackSpace, Tab, Delete, etc
                 if event.keycode == 37 or event.keycode == 50 or \
