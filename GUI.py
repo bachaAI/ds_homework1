@@ -40,6 +40,7 @@ class GUI:
         # Insert given text
         if file:
             f = open(file, 'r')
+            #self.textPad.insert(END, "\n")
             self.textPad.insert(END, f.read())
         # Keybord bindings to virtual events
         self.textPad.bind("<Button-1>", self.mouse_button)
