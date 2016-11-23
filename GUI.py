@@ -68,15 +68,19 @@ class GUI:
         root.mainloop()
 
     def send_receive(self, event):
+        print "Good"
         if self.queue:
             self.client_socket.send(self.queue.pop(0))
         else:
-            self.client_socket.send("")
+            self.client_socket.send('Ooops')
+            print "KuKu"
         triple = self.client_socket.recv(1024)
-        while triple:
+        print triple + "new"
+        while triple != '':
             insert = self.text.parse_triple(triple)
             self.text.change(insert[0], insert[1], insert[2])
-            self.textPad.INSERT("%d.%d" % (insert[0], insert[1]), insert[2])
+            self.textPad.insert("%d.%d" % (insert[0], insert[1]), insert[2])
+            triple = self.client_socket.recv(1024)
 
     def save_command(self):
         file = tkFileDialog.asksaveasfile(mode='w')

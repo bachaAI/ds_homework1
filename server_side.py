@@ -9,7 +9,7 @@ from threading import Thread
 
 class Server:
     def __init__(self):
-        self.host = '172.31.128.202'       # ip server's address
+        self.host = '127.0.0.1'       # ip server's address
         self.port1 = 50001    # server's port
         self.port2 = 50002
         self.port3 = 50003
@@ -43,10 +43,11 @@ class Server:
 
     def edit_function(self, text, client_socket, port):
         while True:
+            queue = Queue()
             triple = client_socket.recv(1024)
-            while triple != '':
+            print triple
+            while triple != 'Ooops':
                 print triple
-                queue = Queue()
                 self.file_syncronization(triple, text, client_socket, queue, port)
                 triple = client_socket.recv(1024)
             if port == self.port1:
@@ -54,6 +55,7 @@ class Server:
                     client_socket.send(queue.take2())
                 if queue.q_user2.__len__() == 0:
                     client_socket.send('')
+                    print 'Send Done'
                 while queue.q_user3.__len__() != 0:
                     client_socket.send(queue.take3())
                 if queue.q_user3.__len__() == 0:
