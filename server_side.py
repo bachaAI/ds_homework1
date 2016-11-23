@@ -59,7 +59,7 @@ class Server:
                     client_socket.send(queue.take3())
                 if queue.q_user3.__len__() == 0:
                     client_socket.send('Nothing')
-            if port == self.port1:
+            if port == self.port2:
                 while queue.q_user1.__len__() != 0:
                     client_socket.send(queue.take1())
                 if queue.q_user1.__len__() == 0:
@@ -68,7 +68,7 @@ class Server:
                     client_socket.send(queue.take3())
                 if queue.q_user3.__len__() == 0:
                     client_socket.send('Nothing')
-            if port == self.port1:
+            if port == self.port3:
                 while queue.q_user1.__len__() != 0:
                     client_socket.send(queue.take1())
                 if queue.q_user1.__len__() == 0:
