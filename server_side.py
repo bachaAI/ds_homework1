@@ -41,7 +41,6 @@ class Server:
             text.change(i,j,elem)
             text.show()
 
-
     def edit_function(self, text, client_socket, port):
         while True:
             triple = client_socket.recv(1024)
