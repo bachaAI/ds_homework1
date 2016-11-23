@@ -19,14 +19,6 @@ class Server:
         self.size = 1024     # max message size
         self.server = None
         self.threads = []
-        #text = File()
-
-
-
-
-
-
-
 
     def file_syncronization(self, triple, text, client_socket, queue, port):
 
@@ -35,45 +27,30 @@ class Server:
             i,j,elem = text.parse_triple(triple)
             text.change(i,j,elem)
             text.upload_to_txt('FileNew.txt')
-            print 'SUPERPUER'
-            #text.show()
-            #print triple
 
         if port == self.port2:
             queue.add_user2(triple)
             i,j,elem = text.parse_triple(triple)
             text.change(i,j,elem)
             text.upload_to_txt('FileNew.txt')
-            #text.show()
 
         if port == self.port3:
             queue.add_user3(triple)
             i,j,elem = text.parse_triple(triple)
             text.change(i,j,elem)
             text.upload_to_txt('FileNew.txt')
-            #text.show()
-
-
 
     def edit_function(self, text, client_socket, port,queue):
         while True:
             triple = client_socket.recv(1024)
-            #print triple
             if triple != 'Nothing':
-                #print triple
                 self.file_syncronization(triple, text, client_socket, queue, port)
-                #triple = client_socket.recv(1024)
             if port == self.port1:
-                print 'Ya TUT'
                 print queue.q_user2.__len__()
                 while queue.q_user2.__len__() != 0:
-                    print 'KUKU EPTA'
                     client_socket.send(queue.take2())
-                    print 'SEND FROM QUEUE 2'
                 while queue.q_user3.__len__() != 0:
                     client_socket.send(queue.take3())
-                #triple_test = '0,2,R'
-               # client_socket.send(triple_test)
                 if queue.q_user2.__len__() == 0:
                     client_socket.send('Nothing')
                 if queue.q_user3.__len__() == 0:
@@ -82,9 +59,7 @@ class Server:
             if port == self.port2:
                 print queue.q_user2.__len__()
                 while queue.q_user1.__len__() != 0:
-                    print 'NU PRIVET'
                     client_socket.send(queue.take1())
-                    print 'SEND FROM QUEUE 1'
                 while queue.q_user3.__len__() != 0:
                     client_socket.send(queue.take3())
                 if queue.q_user1.__len__() == 0:
@@ -101,6 +76,7 @@ class Server:
                     client_socket.send('Nothing')
                 if queue.q_user2.__len__() == 0:
                     client_socket.send('Nothing')
+
     def open_socket(self, port,text,queue):
         try:
             print port
@@ -111,13 +87,7 @@ class Server:
             while True:
                 client_socket, client_addr = self.server.accept()
                 print 'New Client has been connected!'
-                #client_socket.send('Please enter 1 if you want to Upload New File.\n'
-                                  # 'Please enter 2 if you want to Create New File.\n'
-                                   #'Please enter 3 if you want to Download Existed File.\n')
-
-                print 'BOOM!'
                 decision = client_socket.recv(1024)
-                print decision
                 if decision == '1':
                     filename = client_socket.recv(1024)
                     password = client_socket.recv(1024)
@@ -126,16 +96,15 @@ class Server:
                         data = client_socket.recv(1024)
                         while data:
                             print('receiving data...')
-                            print('data:', (data))
+                            #print('data:', (data))
                             f.write(data)
                             data = client_socket.recv(1024)
                             if data[-4:] == 'STOP':
-                                print data
                                 break
                     f.close()
-                    client_socket.send('OKEY!')
-                    print 'Ooooops!'
+                    client_socket.send('Done receiving!')
                     text.download_from_txt('FileNew.txt')
+                    #text.download_from_txt(filename)
                     self.edit_function(text, client_socket, port,queue)
 
 
@@ -151,17 +120,15 @@ class Server:
                     filename = client_socket.recv(1024)
                     password = client_socket.recv(1024)
                     f = open(filename, 'rb')
-                    #if password == password_file:
                     while True:
                         l = f.read(1024)
                         client_socket.send(l)
-                        print('Sent ', repr(l))
+                        #print('Sent ', repr(l))
                         if not l:
                             client_socket.send('STOP')
                             break
                     f.close()
                     text.download_from_txt(filename)
-                    print 'ZAEBIS'
                     self.edit_function(text, client_socket, port,queue)
 
                 else:
@@ -187,6 +154,7 @@ if __name__ == '__main__':
     s.threads.append(thread3)
     for t in s.threads:
         t.start()
+        print 'Servers are born!'
     for t in s.threads:
         t.join()
     print 'Servers are dead!'

@@ -1,4 +1,4 @@
-from socket import AF_INET, SOCK_STREAM, socket, SHUT_WR
+from socket import AF_INET, SOCK_STREAM, socket
 from socket import error as SocketError
 import GUI
 
@@ -14,16 +14,6 @@ if __name__ == '__main__':
     server_address = ('127.0.0.1', 50001)
 
     # Connecting ...
-    '''
-
-    for elem in SOCKETS:
-        server_address = ('172.31.132.48', elem)
-        #server_address = ('127.0.1.1', elem)
-        if s.connect(server_address):
-            break
-        else:
-            print "Server is busy"
-    '''
 
     try:
         s.connect(server_address)
@@ -34,12 +24,12 @@ if __name__ == '__main__':
         print 'Socket connected to %s:%d' % s.getpeername()
         print 'Local end-point is  bound to %s:%d' % s.getsockname()
         print 'Please enter 1 if you want to upload your file.\n Please enter 2 if you want to create New File.\n Please enter 3 if you want to open existing file.\n'
-        decision=raw_input()
+        decision = raw_input()
         s.send(decision)
         if decision == '1':
-            filename=raw_input('Enter file name: ')
+            filename = raw_input('Enter file name: ')
             s.send(filename)
-            password=raw_input('Please, a password for a file: ')
+            password = raw_input('Please, a password for a file: ')
             s.send(password)
             f = open(filename, 'rb')
             while True:
