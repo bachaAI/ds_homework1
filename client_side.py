@@ -147,28 +147,33 @@ if __name__ == '__main__':
             print 'Done sending'
             result = s.recv(1024)
             print result
-           # triple = '0,2,R'
-            #s.send(triple)
             client_GUI = GUI.GUI(filename,s)
             print 'GUI S'
 
 
         elif decision == '2':
             filename = raw_input('Please, enter a name of the file to create: ')
-            password = raw_input('Set a password for a file:')
             s.send(filename)
+            password = raw_input('Set a password for a file:')
             s.send(password)
+            client_GUI = GUI.GUI(filename,s)
 
         elif decision=='3':
-            filename = raw_input('Please, enter a file name: ')
-            password = raw_input('Please enter password of a file:')
+            filename = raw_input('Please, enter a name of the file to create: ')
+            s.send(filename)
+            password = raw_input('Set a password for a file:')
+            s.send(password)
             with open(str(filename), 'wb') as f:
-                while True:
-                    data = s.recv(1024)
-                    if not data:
-                        break
-                    print('reciving data...')
+                while data:
+                    print('receiving data...')
+                    print('data:', (data))
                     f.write(data)
+                    data = s.recv(1024)
+                    if data[-4:] == 'STOP':
+                        print data
+                        break
+            f.close()
+            client_GUI = GUI.GUI(filename,s)
         else:
             print 'Wrong input.'
 

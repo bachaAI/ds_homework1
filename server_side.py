@@ -9,6 +9,7 @@ from threading import Thread
 
 
 class Server:
+
     def __init__(self):
         self.host = '127.0.0.1'       # ip server's address
         self.port1 = 50001    # server's port
@@ -58,10 +59,10 @@ class Server:
             queue = Queue()
             triple = client_socket.recv(1024)
             print triple
-            while triple != 'Nothing':
+            if triple != 'Nothing':
                 print triple
                 self.file_syncronization(triple, text, client_socket, queue, port)
-                triple = client_socket.recv(1024)
+                #triple = client_socket.recv(1024)
 
             if port == self.port1:
                 while queue.q_user2.__len__() != 0:
@@ -94,7 +95,6 @@ class Server:
                     client_socket.send('Nothing')
                 if queue.q_user2.__len__() == 0:
                     client_socket.send('Nothing')
-
 
 
 
@@ -150,19 +150,26 @@ class Server:
                     client_socket.recv(filename)
                     client_socket.recv(password)
                     text = File()
+                    text.download_from_txt(filename)
                     self.edit_function(text, client_socket, port)
 
 
                 elif decision == '3':
                     client_socket.recv(filename)
                     client_socket.recv(password)
-                    text = open(filename, 'rb')
+                    f = open(filename, 'rb')
                     #if password == password_file:
-                    l = text.read(1024)
+                    l = f.read(1024)
                     while (l):
                            client_socket.send(l)
                            print('Sent ', repr(l))
                            l = f.read(1024)
+                           if not l:
+                               s.send('STOP')
+                               break
+                    f.close()
+                    text = File()
+                    text.download_from_txt(filename)
                     self.edit_function(text, client_socket, port)
 
                 else:
