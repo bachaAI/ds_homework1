@@ -77,7 +77,12 @@ class GUI:
         for triple in triple_list:
             insert = self.text.parse_triple(triple)
             self.text.change(insert[0], insert[1], insert[2])
-            self.textPad.insert("%d.%d" % (insert[0]+1, insert[1]), insert[2])
+            if insert[2] == "bs":
+                self.textPad.delete("%d.%d" % (insert[0] + 1, insert[1]),"%d.%d" % (insert[0] + 1, insert[1]+1))
+            elif insert[2] == "ent":
+                self.textPad.insert("%d.%d" % (insert[0] + 1, insert[1]), insert[2])
+            else:
+                self.textPad.insert("%d.%d" % (insert[0]+1, insert[1]), insert[2])
 
     def get_triples(self, input_triple):
         output = []
