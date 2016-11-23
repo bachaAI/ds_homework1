@@ -70,6 +70,7 @@ class Server:
             if port == self.port1:
                 while queue.q_user2.__len__() != 0:
                     client_socket.send(queue.take2())
+                    print 'SEND FROM QUEUE 2'
                 while queue.q_user3.__len__() != 0:
                     client_socket.send(queue.take3())
                 #triple_test = '0,2,R'
@@ -82,6 +83,7 @@ class Server:
             if port == self.port2:
                 while queue.q_user1.__len__() != 0:
                     client_socket.send(queue.take1())
+                    print 'SEND FROM QUEUE 1'
                 while queue.q_user3.__len__() != 0:
                     client_socket.send(queue.take3())
                 if queue.q_user1.__len__() == 0:
