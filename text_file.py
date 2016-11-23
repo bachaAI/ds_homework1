@@ -2,10 +2,10 @@ class File:
     def __init__(self):
         self.rows = []
 
-   # def __init__(self, string_list):
-      #  self.rows = []
-       # for elem in string_list:
-         #   self.rows.append(elem)
+    #def __init__(self, string_list):
+    #    self.rows = []
+    #    for elem in string_list:
+    #        self.rows.append(elem)
 
     def parse_triple(self, triple):
         left_index = triple.index(",")
@@ -65,7 +65,8 @@ if __name__ == "__main__":
     l.append(s4)
     l.append(s3)
     f = File(l)
-    triple = f.parse_triple("2,-1,bs")
+    triple = f.parse_triple("(2,-1,bs)")
+    print triple
     f.change(triple[0], triple[1], triple[2])
     for elem in f.rows:
         print elem

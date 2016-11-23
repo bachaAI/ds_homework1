@@ -72,16 +72,24 @@ class GUI:
         if self.queue:
             self.client_socket.send(self.queue.pop(0))
         else:
-            self.client_socket.send('Ooops')
-            print "KuKu"
+            self.client_socket.send('Nothing')
         triple = self.client_socket.recv(1024)
-        print triple + "new"
-        while triple != 'Nothing':
+        triple_list = self.get_triples(triple)
+        for triple in triple_list:
             insert = self.text.parse_triple(triple)
             self.text.change(insert[0], insert[1], insert[2])
             self.textPad.insert("%d.%d" % (insert[0], insert[1]), insert[2])
-            triple = self.client_socket.recv(1024)
 
+    def get_triples(self, input_triple):
+        output = []
+        while "(" in input_triple:
+            left_index = input_triple.index("(")
+            right_index = input_triple.index(")")
+            output.append(input_triple[left_index+1:right_index])
+            input_triple = input_triple[right_index+1:]
+        return output
+
+    #Function raises by Tk events.
     def save_command(self):
         file = tkFileDialog.asksaveasfile(mode='w')
         if file != None:
@@ -97,28 +105,21 @@ class GUI:
                                         Shuchorukov M., Tkachuk D. using Tk.tkinter.\n No rights left to reserve :)")
 
     #Here come all button handlers
-
     def key_enter(self, event):
         s = self.textPad.index(INSERT)
         self.add_to_queue(s,"ent")
-
-
     def key_backspace(self, event):
         s = self.textPad.index(INSERT)
         self.add_to_queue(s,"bs")
-
     def key_disable(self, event):
         self.textPad.config(state=DISABLED)
         global disableFlag
         disableFlag = True
-
     def mouse_button(self, event):
         self.textPad.config(state=NORMAL)
-
     def key_shift(self, event):
         global shiftFlag
         shiftFlag = True
-
     def key(self, event):
         #print event.keycode
         global disableFlag
@@ -146,13 +147,10 @@ class GUI:
                 self.textPad.config(state=NORMAL)
                 s = self.textPad.index(INSERT)
                 self.add_to_queue(s)
-
-
     def key_press(self, event):
         self.textPad.config(state=DISABLED)
         time.sleep(0.2)
         self.textPad.config(state=NORMAL)
-
     def add_to_queue(self, s, key=""):
         point_index = s.index(".")
         index1 = int(s[:point_index])
@@ -160,11 +158,11 @@ class GUI:
         out = self.textPad.get("%d.%d" % (index1, index2 - 1), "%d.%d" % (index1, index2))
         if key:
             if key == "ent":
-                self.queue.append("%d,%d,%s" % (index1-1, index2, key))
+                self.queue.append("(%d,%d,%s)" % (index1-1, index2, key))
             if key == "bs":
-                self.queue.append("%d,%d,%s" % (index1-1, index2-1, key))
+                self.queue.append("(%d,%d,%s)" % (index1-1, index2-1, key))
         else:
-            self.queue.append("%d,%d,%s" % (index1-1, index2-1, out))
+            self.queue.append("(%d,%d,%s)" % (index1-1, index2-1, out))
         print self.queue
 
 
