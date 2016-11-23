@@ -6,6 +6,7 @@ import sys
 from threading import Thread
 
 
+
 class Server:
     def __init__(self):
         self.host = '127.0.0.1'       # ip server's address
