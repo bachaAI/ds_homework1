@@ -100,13 +100,14 @@ if __name__ == '__main__':
 
     #--------------------------------------
     """
+
     s = socket(AF_INET, SOCK_STREAM)
     print 'TCP Socket created'
 
     # No binding needed for client, OS will bind the socket automatically
     # when connect is issued
 
-    server_address = ('127.0.0.1', 50001)
+    server_address = ('127.0.0.1', 50002)
 
     # Connecting ...
     '''
@@ -163,7 +164,8 @@ if __name__ == '__main__':
             s.send(filename)
             password = raw_input('Set a password for a file:')
             s.send(password)
-            with open(str(filename), 'wb') as f:
+            with open(str(filename+'1'), 'wb') as f:
+                data = s.recv(1024)
                 while data:
                     print('receiving data...')
                     print('data:', (data))
@@ -173,7 +175,7 @@ if __name__ == '__main__':
                         print data
                         break
             f.close()
-            client_GUI = GUI.GUI(filename,s)
+            client_GUI = GUI.GUI(filename+'1',s)
         else:
             print 'Wrong input.'
 

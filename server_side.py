@@ -11,7 +11,7 @@ from threading import Thread
 class Server:
 
     def __init__(self):
-        self.host = '172.20.10.4'       # ip server's address
+        self.host = '127.0.0.1'       # ip server's address
         self.port1 = 50001    # server's port
         self.port2 = 50002
         self.port3 = 50003
@@ -33,6 +33,7 @@ class Server:
             queue.add_user1(triple)
             i,j,elem = text.parse_triple(triple)
             text.change(i,j,elem)
+            text.upload_to_txt('FileNew.txt')
             #text.show()
             #print triple
 
@@ -40,12 +41,14 @@ class Server:
             queue.add_user2(triple)
             i,j,elem = text.parse_triple(triple)
             text.change(i,j,elem)
+            text.upload_to_txt('FileNew.txt')
             #text.show()
 
         if port == self.port3:
             queue.add_user3(triple)
             i,j,elem = text.parse_triple(triple)
             text.change(i,j,elem)
+            text.upload_to_txt('FileNew.txt')
             #text.show()
 
 
@@ -168,6 +171,7 @@ class Server:
                     f.close()
                     text = File()
                     text.download_from_txt(filename)
+                    print 'ZAEBIS'
                     self.edit_function(text, client_socket, port)
 
                 else:
