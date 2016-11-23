@@ -40,7 +40,7 @@ class GUI:
         # Insert given text
         if file:
             f = open(file, 'r')
-            self.textPad.insert(END, "\n")
+            #self.textPad.insert(END, "\n")
             self.textPad.insert(END, f.read())
         # Keybord bindings to virtual events
         self.textPad.bind("<Button-1>", self.mouse_button)
@@ -169,4 +169,4 @@ class GUI:
 
 
 if __name__ == "__main__":
-    gui = GUI("test.txt")
+    gui = GUI("test.txt",50001  )
