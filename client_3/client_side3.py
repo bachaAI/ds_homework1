@@ -1,7 +1,7 @@
 from socket import AF_INET, SOCK_STREAM, socket
 from socket import error as SocketError
 
-import GUI3
+import GUI
 
 SOCKETS = [50001, 50002, 50003]
 
@@ -39,14 +39,14 @@ if __name__ == '__main__':
                     break
             print 'Done sending'
             result = s.recv(1024)
-            client_GUI = GUI1.GUI(filename, s)
+            client_GUI = GUI.GUI(filename, s)
 
         elif decision == '2':
             filename = raw_input('Please, enter a name of the file to create: ')
             s.send(filename)
             password = raw_input('Please, set a password for a file:')
             s.send(password)
-            client_GUI = GUI1.GUI(filename, s)
+            client_GUI = GUI.GUI(filename, s)
 
         elif decision == '3':
             filename = raw_input('Please, enter a name of the file you want to open: ')
@@ -66,7 +66,7 @@ if __name__ == '__main__':
                         f.write(data)
                     data = s.recv(1024)
             f.close()
-            client_GUI = GUI1.GUI(filename1, s)
+            client_GUI = GUI.GUI(filename1, s)
 
         else:
             print 'Wrong input.'
