@@ -1,6 +1,7 @@
-from socket import AF_INET, SOCK_STREAM, socket, SHUT_WR
+from socket import AF_INET, SOCK_STREAM, socket
 from socket import error as SocketError
-import GUI
+
+import GUI1
 
 SOCKETS = [50001, 50002, 50003]
 
@@ -11,22 +12,10 @@ if __name__ == '__main__':
     s = socket(AF_INET, SOCK_STREAM)
     print 'TCP Socket created'
 
-    server_address = ('127.0.0.1', 50001)
-
-    # Connecting ...
-    '''
-
-    for elem in SOCKETS:
-        server_address = ('172.31.132.48', elem)
-        #server_address = ('127.0.1.1', elem)
-        if s.connect(server_address):
-            break
-        else:
-            print "Server is busy"
-    '''
+    server_adress = ('127.0.0.1',5001)
 
     try:
-        s.connect(server_address)
+        s.connect(server_adress)
         decision = ''
         filename = ''
         password = ''
@@ -50,14 +39,14 @@ if __name__ == '__main__':
                     break
             print 'Done sending'
             result = s.recv(1024)
-            client_GUI = GUI.GUI(filename,s)
+            client_GUI = GUI1.GUI(filename, s)
 
         elif decision == '2':
             filename = raw_input('Please, enter a name of the file to create: ')
             s.send(filename)
             password = raw_input('Please, set a password for a file:')
             s.send(password)
-            client_GUI = GUI.GUI(filename,s)
+            client_GUI = GUI1.GUI(filename, s)
 
         elif decision == '3':
             filename = raw_input('Please, enter a name of the file you want to open: ')
@@ -77,7 +66,7 @@ if __name__ == '__main__':
                         f.write(data)
                     data = s.recv(1024)
             f.close()
-            client_GUI = GUI.GUI(filename1,s)
+            client_GUI = GUI1.GUI(filename1, s)
 
         else:
             print 'Wrong input.'
