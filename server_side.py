@@ -145,7 +145,6 @@ class Server:
 
 
 
-
                 elif decision == '2':
                     filename = client_socket.recv(1024)
                     password = client_socket.recv(1024)
