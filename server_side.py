@@ -52,18 +52,30 @@ class Server:
             if port == self.port1:
                 while queue.q_user2.__len__() != 0:
                     client_socket.send(queue.take2())
+                if queue.q_user2.__len__() == 0:
+                    client_socket.send('')
                 while queue.q_user3.__len__() != 0:
                     client_socket.send(queue.take3())
+                if queue.q_user3.__len__() == 0:
+                    client_socket.send('')
             if port == self.port1:
                 while queue.q_user1.__len__() != 0:
                     client_socket.send(queue.take1())
+                if queue.q_user1.__len__() == 0:
+                    client_socket.send('')
                 while queue.q_user3.__len__() != 0:
                     client_socket.send(queue.take3())
+                if queue.q_user3.__len__() == 0:
+                    client_socket.send('')
             if port == self.port1:
                 while queue.q_user1.__len__() != 0:
                     client_socket.send(queue.take1())
+                if queue.q_user1.__len__() == 0:
+                    client_socket.send('')
                 while queue.q_user2.__len__() != 0:
                     client_socket.send(queue.take2())
+                if queue.q_user2.__len__() == 0:
+                    client_socket.send('')
 
 
     def open_socket(self, port):
