@@ -21,6 +21,11 @@ class Server:
         #text = File()
 
 
+
+
+
+
+
     def file_syncronization(self, triple, text, client_socket, queue, port):
 
         if port == self.port1:
@@ -42,6 +47,12 @@ class Server:
             text.change(i,j,elem)
             text.show()
 
+
+
+
+
+
+
     def edit_function(self, text, client_socket, port):
         while True:
             queue = Queue()
@@ -51,33 +62,47 @@ class Server:
                 print triple
                 self.file_syncronization(triple, text, client_socket, queue, port)
                 triple = client_socket.recv(1024)
+
             if port == self.port1:
                 while queue.q_user2.__len__() != 0:
                     client_socket.send(queue.take2())
-                if queue.q_user2.__len__() == 0:
-                    client_socket.send('Nothing')
                 while queue.q_user3.__len__() != 0:
                     client_socket.send(queue.take3())
+                triple_test = '0,2,R'
+                client_socket.send(triple_test)
+                if queue.q_user2.__len__() == 0:
+                    client_socket.send('Nothing')
                 if queue.q_user3.__len__() == 0:
                     client_socket.send('Nothing')
+
             if port == self.port2:
                 while queue.q_user1.__len__() != 0:
                     client_socket.send(queue.take1())
-                if queue.q_user1.__len__() == 0:
-                    client_socket.send('Nothing')
                 while queue.q_user3.__len__() != 0:
                     client_socket.send(queue.take3())
+                if queue.q_user1.__len__() == 0:
+                    client_socket.send('Nothing')
                 if queue.q_user3.__len__() == 0:
                     client_socket.send('Nothing')
+
             if port == self.port3:
                 while queue.q_user1.__len__() != 0:
                     client_socket.send(queue.take1())
-                if queue.q_user1.__len__() == 0:
-                    client_socket.send('Nothing')
                 while queue.q_user2.__len__() != 0:
                     client_socket.send(queue.take2())
+                if queue.q_user1.__len__() == 0:
+                    client_socket.send('Nothing')
                 if queue.q_user2.__len__() == 0:
                     client_socket.send('Nothing')
+
+
+
+
+
+
+
+
+
 
 
     def open_socket(self, port):
