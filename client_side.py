@@ -151,13 +151,6 @@ if __name__ == '__main__':
             #s.send(triple)
             client_GUI = GUI.GUI(filename,s)
             print 'GUI S'
-            while True:
-                triple = s.recv(1024)
-                insert = text.parse_triple(triple)
-                text.change(insert[0],insert[1],insert[2])
-                client_GUI.textPad.INSERT("%d.%d" % (insert[0], insert[1]),insert[2])
-                if triple == "STOP":
-                    break
 
 
         elif decision == '2':
