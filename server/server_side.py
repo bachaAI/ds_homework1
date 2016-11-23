@@ -7,7 +7,6 @@ from threading import Thread
 
 
 
-
 class Server:
 
     def __init__(self):
