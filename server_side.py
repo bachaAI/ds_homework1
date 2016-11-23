@@ -31,6 +31,7 @@ class Server:
 
         if port == self.port1:
             queue.add_user1(triple)
+            print queue.take1()
             i,j,elem = text.parse_triple(triple)
             text.change(i,j,elem)
             text.upload_to_txt('FileNew.txt')
