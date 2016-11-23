@@ -47,6 +47,7 @@ class GUI:
         self.textPad.bind("<Control-c>", self.key_disable)
         self.textPad.bind("<Shift_L>", self.key_shift)
         self.textPad.bind("<Delete>", self.key_disable)
+        self.textPad.bind("<Tab>", self.key_disable)
         self.textPad.bind("<Insert>", self.key_disable)
         self.textPad.bind("<Return>", self.key_enter)
         self.textPad.bind("<BackSpace>",self.key_backspace)
@@ -55,14 +56,14 @@ class GUI:
         self.textPad.pack()
         root.bind('<<send_recv>>', self.send_receive)
 
-        def heartbeat():
-            while True:
-                time.sleep(0.5)
-                root.event_generate('<<send_recv>>', when='tail')
+        #def heartbeat():
+        #    while True:
+        #        time.sleep(0.5)
+        #        root.event_generate('<<send_recv>>', when='tail')
 
-        th = Thread(None, heartbeat)
-        th.setDaemon(True)
-        th.start()
+        #th = Thread(None, heartbeat)
+        #th.setDaemon(True)
+        #th.start()
 
         root.mainloop()
 
@@ -130,8 +131,8 @@ class GUI:
         global disableFlag
         global shiftFlag
         if disableFlag == True:
-            print "disabled"
-            if event.keycode != 37:
+            #print "disabled"
+            if event.keysym != "v":
                 disableFlag = False
         else:
             #print event.keycode
@@ -142,13 +143,17 @@ class GUI:
                 shiftFlag = False
             else:
                 #Block output for Arrows keys
-                if event.keycode == 104 or event.keycode == 100 or \
-                        event.keycode == 102 or event.keycode == 98:
+                if event.keysym == "Down" or event.keysym == "Up" or \
+                        event.keysym == "Right" or event.keysym == "Left":
+                    print event.keysym
                     return
                 #Block output for Ctrl, Shift, BackSpace, Tab, Delete, etc
-                if event.keycode == 37 or event.keycode == 50 or \
-                                event.keycode == 22 or event.keycode == 36 or event.keycode == 23 or\
-                                event.keycode == 64 or event.keycode == 113 or event.keycode == 107:
+                if event.keysym == "Alt_L" or event.keysym == "Alt_R" or \
+                                event.keysym == "BackSpace" or event.keysym == "Delete" or \
+                                event.keysym == "Control_L" or event.keysym == "Control_R" or \
+                                event.keysym == "Shift_L" or event.keysym == "Shift_R" or \
+                                event.keysym == "Tab" or event.keysym == "Return":
+                    print event.keysym
                     return
                 self.textPad.config(state=NORMAL)
                 s = self.textPad.index(INSERT)
@@ -175,4 +180,4 @@ class GUI:
 
 
 if __name__ == "__main__":
-    gui = GUI("test.txt")
+    gui = GUI("test.txt","127")
