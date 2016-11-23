@@ -2,8 +2,6 @@ from socket import AF_INET, SOCK_STREAM, socket
 from socket import error as SocketError
 import GUI
 
-SOCKETS = [50001, 50002, 50003]
-
 if __name__ == '__main__':
 
     print 'Application started'
@@ -11,7 +9,7 @@ if __name__ == '__main__':
     s = socket(AF_INET, SOCK_STREAM)
     print 'TCP Socket created'
 
-    server_address = ('127.0.0.1', 50001)
+    server_address = ('127.0.0.1', 50002)
 
     # Connecting ...
 

@@ -19,13 +19,13 @@ class Server:
         self.server = None
         self.threads = []
 
-    def file_syncronization(self, triple, text, client_socket, queue, port):
+    def file_syncronization(self, triple, text, client_socket, queue, port, filename):
 
         if port == self.port1:
             queue.add_user1(triple)
             i,j,elem = text.parse_triple(triple)
             text.change(i,j,elem)
-            text.upload_to_txt('FileNew.txt')
+            text.upload_to_txt(filename)
 
         if port == self.port2:
             queue.add_user2(triple)
@@ -39,11 +39,11 @@ class Server:
             text.change(i,j,elem)
             text.upload_to_txt('FileNew.txt')
 
-    def edit_function(self, text, client_socket, port,queue):
+    def edit_function(self, text, client_socket, port,queue, filename):
         while True:
             triple = client_socket.recv(1024)
             if triple != 'Nothing':
-                self.file_syncronization(triple, text, client_socket, queue, port)
+                self.file_syncronization(triple, text, client_socket, queue, port,filename)
             if port == self.port1:
                 print queue.q_user2.__len__()
                 while queue.q_user2.__len__() != 0:
@@ -90,24 +90,20 @@ class Server:
                 if decision == '1':
                     filename = client_socket.recv(1024)
                     password = client_socket.recv(1024)
-                    with open(str('FileNew.txt'), 'wb') as f:
-                        print 'file %s opened' % str('FileNew.txt')
+                    with open(str(filename), 'wb') as f:
+                        print 'file %s opened' % str(filename)
                         data = client_socket.recv(1024)
                         while data:
                             print('receiving data...')
-                            #print('data:', (data))
                             f.write(data)
                             data = client_socket.recv(1024)
                             if data[-4:] == 'STOP':
                                 break
                     f.close()
                     client_socket.send('Done receiving!')
-                    text.download_from_txt('FileNew.txt')
+                    text.download_from_txt(filename)
                     #text.download_from_txt(filename)
-                    self.edit_function(text, client_socket, port,queue)
-
-
-
+                    self.edit_function(text, client_socket, port,queue, filename)
                 elif decision == '2':
                     filename = client_socket.recv(1024)
                     password = client_socket.recv(1024)
@@ -128,7 +124,7 @@ class Server:
                             break
                     f.close()
                     text.download_from_txt(filename)
-                    self.edit_function(text, client_socket, port,queue)
+                    self.edit_function(text, client_socket, port, queue, filename)
 
                 else:
                     client_socket.send('You have made wrong decision. Good luck!\n')

@@ -1,9 +1,6 @@
 from socket import AF_INET, SOCK_STREAM, socket
 from socket import error as SocketError
-
 import GUI
-
-SOCKETS = [50001, 50002, 50003]
 
 if __name__ == '__main__':
 
@@ -53,8 +50,7 @@ if __name__ == '__main__':
             s.send(filename)
             password = raw_input('Please, a password for a file: ')
             s.send(password)
-            filename1 = 'randomfile.txt'
-            with open(str(filename1), 'wb') as f:
+            with open(str(filename), 'wb') as f:
                 data = s.recv(1024)
                 while data:
                     print('receiving data...')
@@ -66,7 +62,7 @@ if __name__ == '__main__':
                         f.write(data)
                     data = s.recv(1024)
             f.close()
-            client_GUI = GUI.GUI(filename1, s)
+            client_GUI = GUI.GUI(filename, s)
 
         else:
             print 'Wrong input.'

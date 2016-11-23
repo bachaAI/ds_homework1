@@ -1,9 +1,6 @@
 from socket import AF_INET, SOCK_STREAM, socket
 from socket import error as SocketError
-
 import GUI
-
-SOCKETS = [50001, 50002, 50003]
 
 if __name__ == '__main__':
 
@@ -12,7 +9,7 @@ if __name__ == '__main__':
     s = socket(AF_INET, SOCK_STREAM)
     print 'TCP Socket created'
 
-    server_adress = ('127.0.0.1',5001)
+    server_adress = ('127.0.0.1',5003)
 
     try:
         s.connect(server_adress)
