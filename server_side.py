@@ -147,16 +147,16 @@ class Server:
 
 
                 elif decision == '2':
-                    client_socket.recv(filename)
-                    client_socket.recv(password)
+                    filename = client_socket.recv(1024)
+                    password = client_socket.recv(1024)
                     text = File()
                     text.download_from_txt(filename)
                     self.edit_function(text, client_socket, port)
 
 
                 elif decision == '3':
-                    client_socket.recv(filename)
-                    client_socket.recv(password)
+                    filename = client_socket.recv(1024)
+                    password = client_socket.recv(1024)
                     f = open(filename, 'rb')
                     #if password == password_file:
                     l = f.read(1024)
