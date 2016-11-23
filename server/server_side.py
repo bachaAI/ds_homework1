@@ -76,6 +76,40 @@ class Server:
                 if queue.q_user2.__len__() == 0:
                     client_socket.send('Nothing')
 
+    def check_file_names(self, filename):
+        file = open('passwords.txt', 'r')
+        names = []
+        for line in file:
+            names.append(line.split(';-')[0])
+        if filename in names:
+            file.close()
+            return True
+        else:
+            file.close()
+            return False
+
+    def check_pass(self, filename, password):
+        passes = {}
+        if self.check_file_names(filename):
+            file = open('passwords.txt', 'r')
+            for line in file:
+                l = line.split(';-')
+                passes[l[0]] = l[1].strip()
+            if passes[filename] == password:
+                file.close()
+                return True
+            else:
+                file.close()
+                return False
+
+    def list_of_files(self):
+        files = ''
+        file = open('passwords.txt', 'r')
+        for line in file:
+            files += str(line.split(';-')[0]) + ' '
+        file.close()
+        return files
+
     def open_socket(self, port,text,queue):
         try:
             print port
@@ -88,43 +122,58 @@ class Server:
                 print 'New Client has been connected!'
                 decision = client_socket.recv(1024)
                 if decision == '1':
+                    ListOfFiles = self.list_of_files()
+                    client_socket.send(ListOfFiles)
                     filename = client_socket.recv(1024)
                     password = client_socket.recv(1024)
-                    with open(str(filename), 'wb') as f:
-                        print 'file %s opened' % str(filename)
-                        data = client_socket.recv(1024)
-                        while data:
-                            print('receiving data...')
-                            f.write(data)
+                    if self.check_file_names(filename):
+                        passes = open('passwords.txt', 'a')
+                        passes.write(str(filename)+';-'+str(password)+'\n')
+                        passes.close()
+                        with open(str(filename), 'wb') as f:
+                            print 'file %s opened' % str(filename)
                             data = client_socket.recv(1024)
-                            if data[-4:] == 'STOP':
-                                break
-                    f.close()
-                    client_socket.send('Done receiving!')
-                    text.download_from_txt(filename)
-                    #text.download_from_txt(filename)
-                    self.edit_function(text, client_socket, port,queue, filename)
+                            while data:
+                                print('receiving data...')
+                                f.write(data)
+                                data = client_socket.recv(1024)
+                                if data[-4:] == 'STOP':
+                                    break
+                        f.close()
+                        client_socket.send('Done receiving!')
+                        text.download_from_txt(filename)
+                        #text.download_from_txt(filename)
+                        self.edit_function(text, client_socket, port,queue, filename)
+
                 elif decision == '2':
+                    ListOfFiles = self.list_of_files()
+                    client_socket.send(ListOfFiles)
                     filename = client_socket.recv(1024)
                     password = client_socket.recv(1024)
-                    text.download_from_txt(filename)
-                    self.edit_function(text, client_socket, port,queue)
-
+                    if self.check_file_names(filename):
+                        passes = open('passwords.txt', 'a')
+                        passes.write(str(filename) + ';-' + str(password) + '\n')
+                        passes.close()
+                        text.download_from_txt(filename)
+                        self.edit_function(text, client_socket, port,queue, filename)
 
                 elif decision == '3':
+                    ListOfFiles = self.list_of_files()
+                    client_socket.send(ListOfFiles)
                     filename = client_socket.recv(1024)
                     password = client_socket.recv(1024)
-                    f = open(filename, 'rb')
-                    while True:
-                        l = f.read(1024)
-                        client_socket.send(l)
-                        #print('Sent ', repr(l))
-                        if not l:
-                            client_socket.send('STOP')
-                            break
-                    f.close()
-                    text.download_from_txt(filename)
-                    self.edit_function(text, client_socket, port, queue, filename)
+                    if self.check_file_names(filename) and self.check_pass(filename,password):
+                        f = open(filename, 'rb')
+                        while True:
+                            l = f.read(1024)
+                            client_socket.send(l)
+                            #print('Sent ', repr(l))
+                            if not l:
+                                client_socket.send('STOP')
+                                break
+                        f.close()
+                        text.download_from_txt(filename)
+                        self.edit_function(text, client_socket, port, queue, filename)
 
                 else:
                     client_socket.send('You have made wrong decision. Good luck!\n')

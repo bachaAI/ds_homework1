@@ -9,7 +9,7 @@ if __name__ == '__main__':
     s = socket(AF_INET, SOCK_STREAM)
     print 'TCP Socket created'
 
-    server_adress = ('127.0.0.1',5001)
+    server_adress = ('127.0.0.1',50001)
 
     try:
         s.connect(server_adress)
@@ -23,6 +23,8 @@ if __name__ == '__main__':
         decision=raw_input()
         s.send(decision)
         if decision == '1':
+            listOfFiles =  s.recv(1024)
+            print 'The list of existing files on the server: ', listOfFiles
             filename=raw_input('Enter file name: ')
             s.send(filename)
             password=raw_input('Please, a password for a file: ')
@@ -39,6 +41,8 @@ if __name__ == '__main__':
             client_GUI = GUI.GUI(filename, s)
 
         elif decision == '2':
+            listOfFiles = s.recv(1024)
+            print 'The list of existing files on the server: ', listOfFiles
             filename = raw_input('Please, enter a name of the file to create: ')
             s.send(filename)
             password = raw_input('Please, set a password for a file:')
@@ -46,6 +50,8 @@ if __name__ == '__main__':
             client_GUI = GUI.GUI(filename, s)
 
         elif decision == '3':
+            listOfFiles = s.recv(1024)
+            print 'The list of existing files on the server: ', listOfFiles
             filename = raw_input('Please, enter a name of the file you want to open: ')
             s.send(filename)
             password = raw_input('Please, a password for a file: ')

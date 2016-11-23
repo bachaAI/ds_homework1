@@ -9,12 +9,10 @@ if __name__ == '__main__':
     s = socket(AF_INET, SOCK_STREAM)
     print 'TCP Socket created'
 
-    server_address = ('127.0.0.1', 50002)
-
-    # Connecting ...
+    server_adress = ('127.0.0.1',50002)
 
     try:
-        s.connect(server_address)
+        s.connect(server_adress)
         decision = ''
         filename = ''
         password = ''
@@ -22,12 +20,14 @@ if __name__ == '__main__':
         print 'Socket connected to %s:%d' % s.getpeername()
         print 'Local end-point is  bound to %s:%d' % s.getsockname()
         print 'Please enter 1 if you want to upload your file.\n Please enter 2 if you want to create New File.\n Please enter 3 if you want to open existing file.\n'
-        decision = raw_input()
+        decision=raw_input()
         s.send(decision)
         if decision == '1':
-            filename = raw_input('Enter file name: ')
+            listOfFiles =  s.recv(1024)
+            print 'The list of existing files on the server: ', listOfFiles
+            filename=raw_input('Enter file name: ')
             s.send(filename)
-            password = raw_input('Please, a password for a file: ')
+            password=raw_input('Please, a password for a file: ')
             s.send(password)
             f = open(filename, 'rb')
             while True:
@@ -38,22 +38,25 @@ if __name__ == '__main__':
                     break
             print 'Done sending'
             result = s.recv(1024)
-            client_GUI = GUI.GUI(filename,s)
+            client_GUI = GUI.GUI(filename, s)
 
         elif decision == '2':
+            listOfFiles = s.recv(1024)
+            print 'The list of existing files on the server: ', listOfFiles
             filename = raw_input('Please, enter a name of the file to create: ')
             s.send(filename)
             password = raw_input('Please, set a password for a file:')
             s.send(password)
-            client_GUI = GUI.GUI(filename,s)
+            client_GUI = GUI.GUI(filename, s)
 
         elif decision == '3':
+            listOfFiles = s.recv(1024)
+            print 'The list of existing files on the server: ', listOfFiles
             filename = raw_input('Please, enter a name of the file you want to open: ')
             s.send(filename)
             password = raw_input('Please, a password for a file: ')
             s.send(password)
-            filename1 = 'randomfile.txt'
-            with open(str(filename1), 'wb') as f:
+            with open(str(filename), 'wb') as f:
                 data = s.recv(1024)
                 while data:
                     print('receiving data...')
@@ -65,7 +68,7 @@ if __name__ == '__main__':
                         f.write(data)
                     data = s.recv(1024)
             f.close()
-            client_GUI = GUI.GUI(filename1,s)
+            client_GUI = GUI.GUI(filename, s)
 
         else:
             print 'Wrong input.'
