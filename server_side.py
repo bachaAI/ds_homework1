@@ -159,14 +159,13 @@ class Server:
                     password = client_socket.recv(1024)
                     f = open(filename, 'rb')
                     #if password == password_file:
-                    l = f.read(1024)
-                    while (l):
-                           client_socket.send(l)
-                           print('Sent ', repr(l))
-                           l = f.read(1024)
-                           if not l:
-                               s.send('STOP')
-                               break
+                    while True:
+                        l = f.read(1024)
+                        client_socket.send(l)
+                        print('Sent ', repr(l))
+                        if not l:
+                            client_socket.send('STOP')
+                            break
                     f.close()
                     text = File()
                     text.download_from_txt(filename)
