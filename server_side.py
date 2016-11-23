@@ -46,7 +46,7 @@ class Server:
             queue = Queue()
             triple = client_socket.recv(1024)
             print triple
-            while triple != 'Ooops':
+            while triple != 'Nothing':
                 print triple
                 self.file_syncronization(triple, text, client_socket, queue, port)
                 triple = client_socket.recv(1024)
@@ -54,30 +54,29 @@ class Server:
                 while queue.q_user2.__len__() != 0:
                     client_socket.send(queue.take2())
                 if queue.q_user2.__len__() == 0:
-                    client_socket.send('')
-                    print 'Send Done'
+                    client_socket.send('Nothing')
                 while queue.q_user3.__len__() != 0:
                     client_socket.send(queue.take3())
                 if queue.q_user3.__len__() == 0:
-                    client_socket.send('')
+                    client_socket.send('Nothing')
             if port == self.port1:
                 while queue.q_user1.__len__() != 0:
                     client_socket.send(queue.take1())
                 if queue.q_user1.__len__() == 0:
-                    client_socket.send('')
+                    client_socket.send('Nothing')
                 while queue.q_user3.__len__() != 0:
                     client_socket.send(queue.take3())
                 if queue.q_user3.__len__() == 0:
-                    client_socket.send('')
+                    client_socket.send('Nothing')
             if port == self.port1:
                 while queue.q_user1.__len__() != 0:
                     client_socket.send(queue.take1())
                 if queue.q_user1.__len__() == 0:
-                    client_socket.send('')
+                    client_socket.send('Nothing')
                 while queue.q_user2.__len__() != 0:
                     client_socket.send(queue.take2())
                 if queue.q_user2.__len__() == 0:
-                    client_socket.send('')
+                    client_socket.send('Nothing')
 
 
     def open_socket(self, port):

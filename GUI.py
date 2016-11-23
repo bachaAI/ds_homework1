@@ -76,7 +76,7 @@ class GUI:
             print "KuKu"
         triple = self.client_socket.recv(1024)
         print triple + "new"
-        while triple != '':
+        while triple != 'Nothing':
             insert = self.text.parse_triple(triple)
             self.text.change(insert[0], insert[1], insert[2])
             self.textPad.insert("%d.%d" % (insert[0], insert[1]), insert[2])
