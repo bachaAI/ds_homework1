@@ -40,7 +40,6 @@ class GUI:
         # Insert given text
         if file:
             f = open(file, 'r')
-            #self.textPad.insert(END, "\n")
             self.textPad.insert(END, f.read())
         # Keybord bindings to virtual events
         self.textPad.bind("<Button-1>", self.mouse_button)
@@ -58,7 +57,7 @@ class GUI:
 
         def heartbeat():
             while True:
-                time.sleep(2)
+                time.sleep(0.5)
                 root.event_generate('<<send_recv>>', when='tail')
 
         th = Thread(None, heartbeat)
@@ -78,14 +77,14 @@ class GUI:
         for triple in triple_list:
             insert = self.text.parse_triple(triple)
             self.text.change(insert[0], insert[1], insert[2])
-            self.textPad.insert("%d.%d" % (insert[0], insert[1]), insert[2])
+            self.textPad.insert("%d.%d" % (insert[0]+1, insert[1]), insert[2])
 
     def get_triples(self, input_triple):
         output = []
         while "(" in input_triple:
             left_index = input_triple.index("(")
             right_index = input_triple.index(")")
-            output.append(input_triple[left_index+1:right_index])
+            output.append(input_triple[left_index:right_index+1])
             input_triple = input_triple[right_index+1:]
         return output
 
@@ -140,9 +139,10 @@ class GUI:
                 if event.keycode == 113 or event.keycode == 114 or \
                         event.keycode == 112 or event.keycode == 116:
                     return
-                #Block output for Ctrl, Shift, BackSpace
+                #Block output for Ctrl, Shift, BackSpace, Tab, Delete, etc
                 if event.keycode == 37 or event.keycode == 50 or \
-                                event.keycode == 22 or event.keycode == 36:
+                                event.keycode == 22 or event.keycode == 36 or event.keycode == 23 or\
+                                event.keycode == 64 or event.keycode == 113 or event.keycode == 107:
                     return
                 self.textPad.config(state=NORMAL)
                 s = self.textPad.index(INSERT)
@@ -169,4 +169,4 @@ class GUI:
 
 
 if __name__ == "__main__":
-    gui = GUI("test.txt",50001  )
+    gui = GUI("test.txt")
