@@ -9,7 +9,7 @@ from threading import Thread
 
 class Server:
     def __init__(self):
-        self.host = '172.20.10.4'       # ip server's address
+        self.host = '172.31.128.202'       # ip server's address
         self.port1 = 50001    # server's port
         self.port2 = 50002
         self.port3 = 50003
@@ -28,39 +28,44 @@ class Server:
             text.change(i,j,elem)
             text.show()
             #print triple
-            while queue.q_user2.__len__() != 0:
-                client_socket.send(queue.take2())
-            while queue.q_user3.__len__() != 0:
-                client_socket.send(queue.take3())
-
 
         if port == self.port2:
             queue.add_user2(triple)
             i,j,elem = text.parse_triple(triple)
             text.change(i,j,elem)
             text.show()
-            while queue.q_user1.__len__() != 0:
-                client_socket.send(queue.take1())
-            while queue.q_user3.__len__() != 0:
-                client_socket.send(queue.take3())
 
         if port == self.port3:
             queue.add_user3(triple)
             i,j,elem = text.parse_triple(triple)
             text.change(i,j,elem)
             text.show()
-            while queue.q_user1.__len__() != 0:
-                client_socket.send(queue.take1())
-            while queue.q_user2.__len__() != 0:
-                client_socket.send(queue.take2())
+
 
     def edit_function(self, text, client_socket, port):
         while True:
             triple = client_socket.recv(1024)
-            print triple
-            if triple:
+            while triple != '':
+                print triple
                 queue = Queue()
                 self.file_syncronization(triple, text, client_socket, queue, port)
+                triple = client_socket.recv(1024)
+            if port == self.port1:
+                while queue.q_user2.__len__() != 0:
+                    client_socket.send(queue.take2())
+                while queue.q_user3.__len__() != 0:
+                    client_socket.send(queue.take3())
+            if port == self.port1:
+                while queue.q_user1.__len__() != 0:
+                    client_socket.send(queue.take1())
+                while queue.q_user3.__len__() != 0:
+                    client_socket.send(queue.take3())
+            if port == self.port1:
+                while queue.q_user1.__len__() != 0:
+                    client_socket.send(queue.take1())
+                while queue.q_user2.__len__() != 0:
+                    client_socket.send(queue.take2())
+
 
     def open_socket(self, port):
         try:
