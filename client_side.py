@@ -106,7 +106,7 @@ if __name__ == '__main__':
     # No binding needed for client, OS will bind the socket automatically
     # when connect is issued
 
-    server_address = ('172.20.10.4', 50001)
+    server_address = ('172.20.10.6', 50001)
 
     # Connecting ...
     '''
@@ -149,15 +149,8 @@ if __name__ == '__main__':
             print result
            # triple = '0,2,R'
             #s.send(triple)
-            text = text_file.File()
-            text.download_from_txt(filename)
-            client_GUI = GUI.GUI(filename)
+            client_GUI = GUI.GUI(filename,s)
             print 'GUI S'
-            while True:
-                if client_GUI.queue:
-                    triple = client_GUI.queue.pop(0)
-                    s.send(triple)
-                    break
             while True:
                 triple = s.recv(1024)
                 insert = text.parse_triple(triple)
