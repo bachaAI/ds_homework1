@@ -164,7 +164,8 @@ if __name__ == '__main__':
             s.send(filename)
             password = raw_input('Set a password for a file:')
             s.send(password)
-            with open(str(filename+'1'), 'wb') as f:
+            filename1 = raw_input('Name suka')
+            with open(str(filename1), 'wb') as f:
                 data = s.recv(1024)
                 while data:
                     print('receiving data...')
@@ -175,7 +176,7 @@ if __name__ == '__main__':
                         print data
                         break
             f.close()
-            client_GUI = GUI.GUI(filename+'1',s)
+            client_GUI = GUI.GUI(filename1,s)
         else:
             print 'Wrong input.'
 
