@@ -129,27 +129,24 @@ if __name__ == '__main__':
 
         print 'Socket connected to %s:%d' % s.getpeername()
         print 'Local end-point is  bound to %s:%d' % s.getsockname()
-        decision=raw_input('Waiting for decision...')
+        print 'Please enter 1 if you want to upload your file.\n Please enter 2 if you want to create New File.\n Please enter 3 if you want to open existing file.\n'
+        decision=raw_input()
         s.send(decision)
         if decision == '1':
             filename=raw_input('Enter file name: ')
             s.send(filename)
-            password=raw_input('Set password: ')
+            password=raw_input('Set a password for a file: ')
             s.send(password)
             f = open(filename, 'rb')
-            print 'Yo!'
             while True:
                 l = f.read(1024)
                 s.send(l)
-                print('Sent ', repr(l))
                 if not l:
                     s.send('STOP')
                     break
             print 'Done sending'
             result = s.recv(1024)
-            print result
             client_GUI = GUI.GUI(filename,s)
-            print 'GUI S'
 
 
         elif decision == '2':
@@ -160,11 +157,11 @@ if __name__ == '__main__':
             client_GUI = GUI.GUI(filename,s)
 
         elif decision=='3':
-            filename = raw_input('Please, enter a name of the file to create: ')
+            filename = raw_input('Please, enter a name of the file you want to open: ')
             s.send(filename)
-            password = raw_input('Set a password for a file:')
+            password = raw_input('Enter a password for a file: ')
             s.send(password)
-            filename1 = raw_input('Name suka')
+            filename1='randomfile.txt'
             with open(str(filename1), 'wb') as f:
                 data = s.recv(1024)
                 while data:
