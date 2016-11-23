@@ -11,7 +11,7 @@ from threading import Thread
 class Server:
 
     def __init__(self):
-        self.host = '127.0.0.1'       # ip server's address
+        self.host = '172.20.10.4'       # ip server's address
         self.port1 = 50001    # server's port
         self.port2 = 50002
         self.port3 = 50003
@@ -33,20 +33,20 @@ class Server:
             queue.add_user1(triple)
             i,j,elem = text.parse_triple(triple)
             text.change(i,j,elem)
-            text.show()
+            #text.show()
             #print triple
 
         if port == self.port2:
             queue.add_user2(triple)
             i,j,elem = text.parse_triple(triple)
             text.change(i,j,elem)
-            text.show()
+            #text.show()
 
         if port == self.port3:
             queue.add_user3(triple)
             i,j,elem = text.parse_triple(triple)
             text.change(i,j,elem)
-            text.show()
+            #text.show()
 
 
 
@@ -60,7 +60,7 @@ class Server:
             triple = client_socket.recv(1024)
             print triple
             if triple != 'Nothing':
-                print triple
+                #print triple
                 self.file_syncronization(triple, text, client_socket, queue, port)
                 #triple = client_socket.recv(1024)
 
@@ -69,8 +69,8 @@ class Server:
                     client_socket.send(queue.take2())
                 while queue.q_user3.__len__() != 0:
                     client_socket.send(queue.take3())
-                triple_test = '0,2,R'
-                client_socket.send(triple_test)
+                #triple_test = '0,2,R'
+               # client_socket.send(triple_test)
                 if queue.q_user2.__len__() == 0:
                     client_socket.send('Nothing')
                 if queue.q_user3.__len__() == 0:
