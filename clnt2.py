@@ -107,7 +107,7 @@ if __name__ == '__main__':
     # No binding needed for client, OS will bind the socket automatically
     # when connect is issued
 
-    server_address = ('127.0.0.1', 50001)
+    server_address = ('127.0.0.1', 50002)
 
     # Connecting ...
     '''
@@ -170,7 +170,7 @@ if __name__ == '__main__':
                 while data:
                     print('receiving data...')
                     print('data:', (data))
-                    #f.write(data)
+                    # f.write(data)
                     if data[-4:] == 'STOP':
                         f.write(data[:-4])
                         print data

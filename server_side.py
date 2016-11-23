@@ -36,11 +36,13 @@ class Server:
             i,j,elem = text.parse_triple(triple)
             text.change(i,j,elem)
             text.upload_to_txt('FileNew.txt')
+            print 'SUPERPUER'
             #text.show()
             #print triple
 
         if port == self.port2:
             queue.add_user2(triple)
+            print queue.take2()
             i,j,elem = text.parse_triple(triple)
             text.change(i,j,elem)
             text.upload_to_txt('FileNew.txt')
@@ -55,22 +57,22 @@ class Server:
 
 
 
-
-
-
-
     def edit_function(self, text, client_socket, port):
         while True:
             queue = Queue()
             triple = client_socket.recv(1024)
-            print triple
+            #print triple
             if triple != 'Nothing':
                 #print triple
                 self.file_syncronization(triple, text, client_socket, queue, port)
+                print 'GAGAGAGAG'
                 #triple = client_socket.recv(1024)
-
+            print 'NUUUUUUUU'
             if port == self.port1:
+                print 'Ya TUT'
+                print queue.q_user2.__len__()
                 while queue.q_user2.__len__() != 0:
+                    print 'KUKU EPTA'
                     client_socket.send(queue.take2())
                     print 'SEND FROM QUEUE 2'
                 while queue.q_user3.__len__() != 0:
@@ -84,6 +86,7 @@ class Server:
 
             if port == self.port2:
                 while queue.q_user1.__len__() != 0:
+                    print 'NU PRIVET'
                     client_socket.send(queue.take1())
                     print 'SEND FROM QUEUE 1'
                 while queue.q_user3.__len__() != 0:
@@ -102,16 +105,6 @@ class Server:
                     client_socket.send('Nothing')
                 if queue.q_user2.__len__() == 0:
                     client_socket.send('Nothing')
-
-
-
-
-
-
-
-
-
-
     def open_socket(self, port):
         try:
             print port

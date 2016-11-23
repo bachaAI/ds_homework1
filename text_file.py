@@ -8,6 +8,7 @@ class File:
     #        self.rows.append(elem)
 
     def parse_triple(self, triple):
+        triple = triple[1:-1]
         left_index = triple.index(",")
         right_index = triple.rindex(",")
         i = int(triple[:left_index])
