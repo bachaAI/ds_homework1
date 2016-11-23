@@ -32,7 +32,6 @@ class Server:
 
         if port == self.port1:
             queue.add_user1(triple)
-            print queue.take1()
             i,j,elem = text.parse_triple(triple)
             text.change(i,j,elem)
             text.upload_to_txt('FileNew.txt')
@@ -42,7 +41,6 @@ class Server:
 
         if port == self.port2:
             queue.add_user2(triple)
-            print queue.take2()
             i,j,elem = text.parse_triple(triple)
             text.change(i,j,elem)
             text.upload_to_txt('FileNew.txt')
@@ -57,17 +55,14 @@ class Server:
 
 
 
-    def edit_function(self, text, client_socket, port):
+    def edit_function(self, text, client_socket, port,queue):
         while True:
-            queue = Queue()
             triple = client_socket.recv(1024)
             #print triple
             if triple != 'Nothing':
                 #print triple
                 self.file_syncronization(triple, text, client_socket, queue, port)
-                print 'GAGAGAGAG'
                 #triple = client_socket.recv(1024)
-            print 'NUUUUUUUU'
             if port == self.port1:
                 print 'Ya TUT'
                 print queue.q_user2.__len__()
@@ -85,6 +80,7 @@ class Server:
                     client_socket.send('Nothing')
 
             if port == self.port2:
+                print queue.q_user2.__len__()
                 while queue.q_user1.__len__() != 0:
                     print 'NU PRIVET'
                     client_socket.send(queue.take1())
@@ -105,7 +101,7 @@ class Server:
                     client_socket.send('Nothing')
                 if queue.q_user2.__len__() == 0:
                     client_socket.send('Nothing')
-    def open_socket(self, port):
+    def open_socket(self, port,text,queue):
         try:
             print port
             self.server = socket(AF_INET, SOCK_STREAM)
@@ -139,18 +135,16 @@ class Server:
                     f.close()
                     client_socket.send('OKEY!')
                     print 'Ooooops!'
-                    text = File()
                     text.download_from_txt('FileNew.txt')
-                    self.edit_function(text, client_socket, port)
+                    self.edit_function(text, client_socket, port,queue)
 
 
 
                 elif decision == '2':
                     filename = client_socket.recv(1024)
                     password = client_socket.recv(1024)
-                    text = File()
                     text.download_from_txt(filename)
-                    self.edit_function(text, client_socket, port)
+                    self.edit_function(text, client_socket, port,queue)
 
 
                 elif decision == '3':
@@ -166,10 +160,9 @@ class Server:
                             client_socket.send('STOP')
                             break
                     f.close()
-                    text = File()
                     text.download_from_txt(filename)
                     print 'ZAEBIS'
-                    self.edit_function(text, client_socket, port)
+                    self.edit_function(text, client_socket, port,queue)
 
                 else:
                     client_socket.send('You have made wrong decision. Good luck!\n')
@@ -184,9 +177,11 @@ class Server:
 
 if __name__ == '__main__':
     s = Server()
-    thread1 = Thread(target=s.open_socket, args=(s.port1,))
-    thread2 = Thread(target=s.open_socket, args=(s.port2,))
-    thread3 = Thread(target=s.open_socket, args=(s.port3,))
+    queue = Queue()
+    text = File()
+    thread1 = Thread(target=s.open_socket, args=(s.port1,text,queue))
+    thread2 = Thread(target=s.open_socket, args=(s.port2,text,queue))
+    thread3 = Thread(target=s.open_socket, args=(s.port3,text,queue))
     s.threads.append(thread1)
     s.threads.append(thread2)
     s.threads.append(thread3)

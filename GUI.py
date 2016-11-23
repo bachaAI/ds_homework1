@@ -67,9 +67,10 @@ class GUI:
         root.mainloop()
 
     def send_receive(self, event):
-        print "Good"
+        #print "Good"
         if self.queue:
             self.client_socket.send(self.queue.pop(0))
+            print self.queue
         else:
             self.client_socket.send('Nothing')
         triple = self.client_socket.recv(1024)
