@@ -26,6 +26,8 @@ class Server:
 
 
 
+
+
     def file_syncronization(self, triple, text, client_socket, queue, port):
 
         if port == self.port1:
