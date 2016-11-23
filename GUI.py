@@ -4,6 +4,9 @@ from ScrolledText import *
 import tkFileDialog
 import tkMessageBox
 import time
+from threading import Thread
+import text_file
+from socket import AF_INET, SOCK_STREAM, socket
 
 
 disableFlag = False
@@ -11,11 +14,17 @@ shiftFlag = False
 
 class GUI:
     queue = []
+    client_socket = None
+    text = None
+
     #root = Tkinter.Tk(className=" Collaborative Text Editor")
     #textPad = ScrolledText(root, width=100, height=80)
 
-    def __init__(self, file):
+    def __init__(self, file, socket):
         self.queue = []
+        self.client_socket = socket
+        self.text = text_file.File()
+        self.text.download_from_txt(file)
         root = Tkinter.Tk(className=" Collaborative Text Editor")
         self.textPad = ScrolledText(root, width=100, height=80)
         menu = Menu(root)
@@ -45,9 +54,29 @@ class GUI:
         self.textPad.bind("<Key>", self.key_press)
         self.textPad.bind("<KeyRelease>", self.key)
         self.textPad.pack()
-        print "2"
+        root.bind('<<send_recv>>', self.send_receive)
+
+        def heartbeat():
+            while True:
+                time.sleep(2)
+                root.event_generate('<<send_recv>>', when='tail')
+
+        th = Thread(None, heartbeat)
+        th.setDaemon(True)
+        th.start()
+
         root.mainloop()
-        print "1"
+
+    def send_receive(self, event):
+        if self.queue:
+            self.client_socket.send(self.queue.pop(0))
+        else:
+            self.client_socket.send("")
+        triple = self.client_socket.recv(1024)
+        while triple:
+            insert = self.text.parse_triple(triple)
+            self.text.change(insert[0], insert[1], insert[2])
+            self.textPad.INSERT("%d.%d" % (insert[0], insert[1]), insert[2])
 
     def save_command(self):
         file = tkFileDialog.asksaveasfile(mode='w')
