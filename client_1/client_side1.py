@@ -23,7 +23,7 @@ if __name__ == '__main__':
         decision=raw_input('Waiting for decision...: ')
         s.send(decision)
         if decision == '1':
-            listOfFiles =  s.recv(1024)
+            listOfFiles = s.recv(1024)
             print 'The list of existing files on the server: ', listOfFiles
             filename=raw_input('Enter file name: ')
             s.send(filename)
@@ -37,7 +37,7 @@ if __name__ == '__main__':
                     s.send('STOP')
                     break
             print 'Done sending'
-            result = s.recv(1024)
+            #result = s.recv(1024)
             client_GUI = GUI.GUI(filename, s)
 
         elif decision == '2':
@@ -47,6 +47,9 @@ if __name__ == '__main__':
             s.send(filename)
             password = raw_input('Please, set a password for a file:')
             s.send(password)
+            f = open(filename,'wb')
+            f.write('Your text is here...')
+            f.close()
             client_GUI = GUI.GUI(filename, s)
 
         elif decision == '3':
