@@ -200,7 +200,7 @@ if __name__ == '__main__':
     print 'Welcome to the Collaborative Text Editor'
     print 'Welcome to the Collaborative Text Editor'
     host = raw_input("Enter server address, please: ")
-    s = Server()
+    s = Server(host=host)
     queue = Queue()
     text = File()
     thread1 = Thread(target=s.open_socket, args=(s.port1,text,queue))
