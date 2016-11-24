@@ -9,8 +9,8 @@ from threading import Thread
 
 class Server:
 
-    def __init__(self):
-        self.host = '127.0.0.1'       # ip server's address
+    def __init__(self,host):
+        self.host = host      # ip server's address
         self.port1 = 50001    # server's port
         self.port2 = 50002
         self.port3 = 50003
@@ -198,6 +198,8 @@ class Server:
 
 if __name__ == '__main__':
     print 'Welcome to the Collaborative Text Editor'
+    print 'Welcome to the Collaborative Text Editor'
+    host = raw_input("Enter server address, please: ")
     s = Server()
     queue = Queue()
     text = File()
