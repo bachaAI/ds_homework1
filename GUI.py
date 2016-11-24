@@ -47,6 +47,7 @@ class GUI:
         self.textPad.bind("<Control-c>", self.key_disable)
         self.textPad.bind("<Shift_L>", self.key_shift)
         self.textPad.bind("<Delete>", self.key_disable)
+        self.textPad.bind("<Tab>", self.key_disable)
         self.textPad.bind("<Insert>", self.key_disable)
         self.textPad.bind("<Return>", self.key_enter)
         self.textPad.bind("<BackSpace>",self.key_backspace)
@@ -67,9 +68,10 @@ class GUI:
         root.mainloop()
 
     def send_receive(self, event):
-        print "Good"
+        #print "Good"
         if self.queue:
             self.client_socket.send(self.queue.pop(0))
+            print self.queue
         else:
             self.client_socket.send('Nothing')
         triple = self.client_socket.recv(1024)
@@ -77,7 +79,15 @@ class GUI:
         for triple in triple_list:
             insert = self.text.parse_triple(triple)
             self.text.change(insert[0], insert[1], insert[2])
-            self.textPad.insert("%d.%d" % (insert[0]+1, insert[1]), insert[2])
+            if insert[2] == "bs":
+                if insert[1] == -1:
+                    self.textPad.insert("%d.0"%(insert[0]-1),"%d.end"%insert[0],self.text.rows[insert[0]-1])
+                else:
+                    self.textPad.delete("%d.%d" % (insert[0] + 1, insert[1]),"%d.%d" % (insert[0] + 1, insert[1]+1))
+            elif insert[2] == "ent":
+                self.textPad.insert("%d.%d" % (insert[0] + 1, insert[1]), "\n")
+            else:
+                self.textPad.insert("%d.%d" % (insert[0]+1, insert[1]), insert[2])
 
     def get_triples(self, input_triple):
         output = []
@@ -124,8 +134,8 @@ class GUI:
         global disableFlag
         global shiftFlag
         if disableFlag == True:
-            print "disabled"
-            if event.keycode != 37:
+            #print "disabled"
+            if event.keysym != "v":
                 disableFlag = False
         else:
             #print event.keycode
@@ -136,13 +146,17 @@ class GUI:
                 shiftFlag = False
             else:
                 #Block output for Arrows keys
-                if event.keycode == 104 or event.keycode == 100 or \
-                        event.keycode == 102 or event.keycode == 98:
+                if event.keysym == "Down" or event.keysym == "Up" or \
+                        event.keysym == "Right" or event.keysym == "Left":
+                    print event.keysym
                     return
                 #Block output for Ctrl, Shift, BackSpace, Tab, Delete, etc
-                if event.keycode == 37 or event.keycode == 50 or \
-                                event.keycode == 22 or event.keycode == 36 or event.keycode == 23 or\
-                                event.keycode == 64 or event.keycode == 113 or event.keycode == 107:
+                if event.keysym == "Alt_L" or event.keysym == "Alt_R" or \
+                                event.keysym == "BackSpace" or event.keysym == "Delete" or \
+                                event.keysym == "Control_L" or event.keysym == "Control_R" or \
+                                event.keysym == "Shift_L" or event.keysym == "Shift_R" or \
+                                event.keysym == "Tab" or event.keysym == "Return":
+                    print event.keysym
                     return
                 self.textPad.config(state=NORMAL)
                 s = self.textPad.index(INSERT)
@@ -169,4 +183,5 @@ class GUI:
 
 
 if __name__ == "__main__":
-    gui = GUI("test.txt")
+    gui = GUI("test.txt","127")
+    pass
