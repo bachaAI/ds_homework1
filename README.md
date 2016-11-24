@@ -15,11 +15,13 @@ Distributed Systems course homework 1
    Decision 3 means working on exisiting file. You should write a filename from a list of existing file as well as to know password to the file. By default you can work on file 'file1.txt', the password for this file is '123'. <br>
 7. GUI will be run if everything is entered correctly. <br>
 
-  How to use GUI of collaborative editor: <br>
+How to use GUI of collaborative editor: <br>
+
 In this version (1.0) for appropriate work it is <b>NOT</b> reccomended to 
-1. Use button bindings as Ctrl+x, Ctrl+v, except Ctrl+c.   <br>
-2. Push several buttons at once or hold button as long as you want. <br>
-1. Use all function buttons, as F1-F12, etc.  <br>
-1. Because of GUI from Tkinter, you also should not press Backspace, in the empty string. <br>
- <br>
+
+*  Use button bindings as Ctrl+x, Ctrl+v, except Ctrl+c.   <br>
+*  Push several buttons at once or hold button as long as you want. <br>
+*  Use all function buttons, as F1-F12, etc.  <br>
+*  Because of GUI from Tkinter, you also should not press Backspace, in the empty string. <br>
+
 You can use following functional buttons: Enter, Backspace (except case 4 above), Shift. <br>
