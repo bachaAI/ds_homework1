@@ -5,11 +5,11 @@ import GUI
 if __name__ == '__main__':
 
     print 'Application started'
-
+    host = raw_input("Enter server address, please: ")
     s = socket(AF_INET, SOCK_STREAM)
     print 'TCP Socket created'
 
-    server_adress = ('127.0.0.1',50002)
+    server_adress = (host,50002)
 
     try:
         s.connect(server_adress)
