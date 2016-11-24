@@ -16,10 +16,11 @@ Distributed Systems course homework 1
 7. GUI will be run if everything is entered correctly. <br>
 
   How to use GUI of collaborative editor: <br>
-In this version (1.0) for appropriate work it is <b>NOT</b> reccomended to  <br>
-	1. Use button bindings as Ctrl+x, Ctrl+v, except Ctrl+c.   <br>
-	2. Push several buttons at once or hold button as long as you want. <br>
-	3. Use all function buttons, as F1-F12, etc.  <br>
-	4. Because of GUI from Tkinter, you also should not press Backspace, in the empty string. <br>
+In this version (1.0) for appropriate work it is <b>NOT</b> reccomended to 
+
+1. Use button bindings as Ctrl+x, Ctrl+v, except Ctrl+c.   <br>
+1. Push several buttons at once or hold button as long as you want. <br>
+1. Use all function buttons, as F1-F12, etc.  <br>
+1. Because of GUI from Tkinter, you also should not press Backspace, in the empty string. <br>
  <br>
 You can use following functional buttons: Enter, Backspace (except case 4 above), Shift. <br>
