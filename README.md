@@ -3,8 +3,8 @@ Distributed Systems course homework 1
 =====================================
  How to succesfully run the program (do only this actions): 
  
-0. Change server IP on yours in server/server_side.py 
-0. Write this IP also to all clients: client1/client_side1.py, client2/client_side2.py, client3/client_side3.py <br>
+0. Enter your server IP while running server/server_side.py 
+0. Enter IP address above while running: client1/client_side1.py, client2/client_side2.py, client3/client_side3.py , too.<br>
 0. Check if ports 50001, 50002, 50003 on server are free. If not, using terminal kill processes in ports (in Unix sudo kill -9 PID). <br>
 0. run server/server_side.py <br>
 0. run all or some of clients: client1/client_side1.py, client2/client_side2.py, client3/client_side3.py <br>
