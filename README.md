@@ -14,7 +14,7 @@ Distributed Systems course homework 1
 *  Decision 2 means creating new file. Simply write a unique file name in format 'name.txt' <br>
 *  Decision 3 means working on exisiting file. You should write a filename from a list of existing file as well as to know password to the file. By default you can work on file 'file1.txt', the password for this file is '123'. <br>
 
-0. GUI will be run if everything is entered correctly. <br>
+7. GUI will be run if everything is entered correctly. <br>
 
 How to use GUI of collaborative editor: <br>
 
