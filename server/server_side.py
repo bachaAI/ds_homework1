@@ -31,19 +31,20 @@ class Server:
             queue.add_user2(triple)
             i,j,elem = text.parse_triple(triple)
             text.change(i,j,elem)
-            text.upload_to_txt('FileNew.txt')
+            text.upload_to_txt(filename)
 
         if port == self.port3:
             queue.add_user3(triple)
             i,j,elem = text.parse_triple(triple)
             text.change(i,j,elem)
-            text.upload_to_txt('FileNew.txt')
+            text.upload_to_txt(filename)
 
     def edit_function(self, text, client_socket, port,queue, filename):
         while True:
             triple = client_socket.recv(1024)
             if triple != 'Nothing':
                 self.file_syncronization(triple, text, client_socket, queue, port,filename)
+
             if port == self.port1:
                 print queue.q_user2.__len__()
                 while queue.q_user2.__len__() != 0:
@@ -112,11 +113,10 @@ class Server:
 
     def open_socket(self, port,text,queue):
         try:
-            print port
             self.server = socket(AF_INET, SOCK_STREAM)
             self.server.bind((self.host, port))
             self.server.listen(self.backlog)
-            print 'Lets Go!'
+            print str(port) + ' port ' + 'is open for accepting clients clients'
             while True:
                 client_socket, client_addr = self.server.accept()
                 print 'New Client has been connected!'
@@ -187,6 +187,7 @@ class Server:
 
 
 if __name__ == '__main__':
+    print 'Welcome to the Collaborative Text Editor'
     s = Server()
     queue = Queue()
     text = File()
@@ -198,10 +199,10 @@ if __name__ == '__main__':
     s.threads.append(thread3)
     for t in s.threads:
         t.start()
-        print 'Servers are born!'
+        #print 'Servers are born!'
     for t in s.threads:
         t.join()
-    print 'Servers are dead!'
+    #print 'Servers are dead!'
 
 
 

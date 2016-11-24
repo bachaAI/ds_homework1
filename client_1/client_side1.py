@@ -19,8 +19,8 @@ if __name__ == '__main__':
 
         print 'Socket connected to %s:%d' % s.getpeername()
         print 'Local end-point is  bound to %s:%d' % s.getsockname()
-        print 'Please enter 1 if you want to upload your file.\n Please enter 2 if you want to create New File.\n Please enter 3 if you want to open existing file.\n'
-        decision=raw_input()
+        print 'Please enter 1 if you want to upload your file.\nPlease enter 2 if you want to create New File.\nPlease enter 3 if you want to open existing file.\n'
+        decision=raw_input('Waiting for decision...: ')
         s.send(decision)
         if decision == '1':
             listOfFiles =  s.recv(1024)

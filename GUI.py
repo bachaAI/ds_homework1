@@ -56,14 +56,14 @@ class GUI:
         self.textPad.pack()
         root.bind('<<send_recv>>', self.send_receive)
 
-        #def heartbeat():
-        #    while True:
-        #        time.sleep(0.5)
-        #        root.event_generate('<<send_recv>>', when='tail')
+        def heartbeat():
+            while True:
+                time.sleep(0.5)
+                root.event_generate('<<send_recv>>', when='tail')
 
-        #th = Thread(None, heartbeat)
-        #th.setDaemon(True)
-        #th.start()
+        th = Thread(None, heartbeat)
+        th.setDaemon(True)
+        th.start()
 
         root.mainloop()
 
@@ -80,9 +80,12 @@ class GUI:
             insert = self.text.parse_triple(triple)
             self.text.change(insert[0], insert[1], insert[2])
             if insert[2] == "bs":
-                self.textPad.delete("%d.%d" % (insert[0] + 1, insert[1]),"%d.%d" % (insert[0] + 1, insert[1]+1))
+                if insert[1] == -1:
+                    self.textPad.insert("%d.0"%(insert[0]-1),"%d.end"%insert[0],self.text.rows[insert[0]-1])
+                else:
+                    self.textPad.delete("%d.%d" % (insert[0] + 1, insert[1]),"%d.%d" % (insert[0] + 1, insert[1]+1))
             elif insert[2] == "ent":
-                self.textPad.insert("%d.%d" % (insert[0] + 1, insert[1]), insert[2])
+                self.textPad.insert("%d.%d" % (insert[0] + 1, insert[1]), "\n")
             else:
                 self.textPad.insert("%d.%d" % (insert[0]+1, insert[1]), insert[2])
 
