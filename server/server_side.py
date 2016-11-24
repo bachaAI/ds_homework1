@@ -198,7 +198,6 @@ class Server:
 
 if __name__ == '__main__':
     print 'Welcome to the Collaborative Text Editor'
-    print 'Welcome to the Collaborative Text Editor'
     host = raw_input("Enter server address, please: ")
     s = Server(host=host)
     queue = Queue()
