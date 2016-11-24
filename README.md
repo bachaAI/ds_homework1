@@ -1,6 +1,5 @@
 # ds_homework1
-<pre>	Distributed Systems course homework 1 </pre><br>
- <br>
+<pre>	Distributed Systems course homework 1 </pre>
 How to succesfully run the program (do only this actions): <br>
 1. Change server IP on yours in server/server_side.py <br>
 2. Write this IP also to all clients: client1/client_side1.py, client2/client_side2.py, client3/client_side3.py <br>
