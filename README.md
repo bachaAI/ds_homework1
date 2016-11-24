@@ -1,5 +1,5 @@
 # ds_homework1
-Distributed Systems course homework 1 <br>
+<pre>	Distributed Systems course homework 1 </pre><br>
  <br>
 How to succesfully run the program (do only this actions): <br>
 1. Change server IP on yours in server/server_side.py <br>
